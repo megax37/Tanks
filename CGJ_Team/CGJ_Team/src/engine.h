@@ -5,8 +5,8 @@
 #define RADIANS_TO_DEGREES 57.29577951308232185913
 #define M_UNITE 0.7071067811865475244f
 
-#include "Dependencies\glew\glew.h"
-#include "Dependencies\freeglut\freeglut.h"
+#include "GL\glew.h"
+#include "GL\freeglut.h"
 
 #include <iostream>
 #include <sstream>
