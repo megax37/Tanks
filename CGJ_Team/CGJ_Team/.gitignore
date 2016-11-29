@@ -1,5 +1,7 @@
 /Debug/
 /Release/
+*.vcxproj
+*.filters
 *.sln
 *.sdf
 *.opensdf
