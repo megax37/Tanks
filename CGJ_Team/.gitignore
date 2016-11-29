@@ -1,11 +1,13 @@
-*.vcxproj
-*.filters
-*.sln
 *.sdf
 *.opensdf
 *.suo
 *.db
 *.opendb
+*.exe
+*.ilk
+*.pdb
+*.ipdb
+*.iobj
 
 # Package Files #
 *.jar
