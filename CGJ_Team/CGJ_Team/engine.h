@@ -7,6 +7,7 @@
 
 #include "Dependencies\glew\glew.h"
 #include "Dependencies\freeglut\freeglut.h"
+#include "Dependencies\SOIL\SOIL.h"
 
 #include <iostream>
 #include <sstream>
@@ -24,6 +25,7 @@
 #include "Mesh.h"
 #include "ShaderProgram.h"
 #include "Camera.h"
+#include "Texture.h"
 
 #include "ErrorHandler.h"
 

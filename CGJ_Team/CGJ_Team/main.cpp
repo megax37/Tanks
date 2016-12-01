@@ -1,21 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 //
-// Model Hierarchy using scene manager
-//
-//	Final individual assignment:
-//	1.	Create classes: Scene, Camera and Mesh (that loads a
-//		mesh from a Wavefront OBJ file) and build a small
-//		scenegraph of your tangram scene (you may create more 
-//		classes if needed).
-//	2.	Create a ground object and couple the tangram figure
-//		to the ground. Press keys to move the ground about: 
-//		the tangram figure must follow the ground.
-//	3.	Animate between closed puzzle (initial square) and 
-//		tangram figure by pressing a key.
-//	4.	Spherical camera interaction through mouse. It should
-//		be possible to interact while animation is playing.
-//
-//	Copyright (c) 2013-2016 by Carlos Martinho
+// TANKS - TEAM ASSIGNMENT 1
 //
 ///////////////////////////////////////////////////////////////////////
 
@@ -23,6 +8,7 @@
 #include "KeyBuffer.h"
 #include "SceneGraph.h"
 #include "MeshManager.h"
+#include "TextureManager.h"
 #include "ShaderProgramManager.h"
 #include "SceneGraphManager.h"
 //using namespace engine;
@@ -60,6 +46,17 @@ float t = 0.0f;
 // Time update
 int lastTime = 0, elapsedTime = 0;
 
+/////////////////////////////////////////////////////////////////////// Textures
+
+void createTextures()
+{
+	Texture* texture;
+	//texture = new Texture("Textures/wood-texture.jpg");
+	texture = new Texture("Textures/lightwood.tga");
+	//texture = new Texture("Textures/stone.tga");
+	TextureManager::instance()->add("wood", texture);
+}
+
 /////////////////////////////////////////////////////////////////////// Mesh
 
 void createMeshes()
@@ -95,6 +92,8 @@ void createShaderPrograms()
 	program->addUniform("ModelMatrix");
 	program->addUniform("ViewMatrix");
 	program->addUniform("ProjectionMatrix");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
 	ShaderProgramManager::instance()->add("stack", program);
 }
 
@@ -155,52 +154,61 @@ SceneNode* groundRoot, *triangleR, *triangleG, *triangleB, *triangleO, *triangle
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 {
 	Mesh* mesh;
+	Texture* tex;
 	
 	// Ground
 	mesh = MeshManager::instance()->get("cube");
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
-	ground->setColor(Vector4D(1.0f, 1.0f, 1.0f, 1.0f));
+	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
 	ground->setMatrix(translation(0.0f, -0.25f, 0.0f));
 	ground->setScale(scale(5.0f, 0.25f, 5.0f));
+
+	mesh = MeshManager::instance()->get("cube2");
+	tex = TextureManager::instance()->get("wood");
+	cube = scenegraph->createNode();
+	cube->setMesh(mesh);
+	cube->setTexture(tex);
+	cube->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+
 	// Triangles
-	mesh = MeshManager::instance()->get("triangle3D");
-	/**/
+	//mesh = MeshManager::instance()->get("triangle3D");
+	/** /
 	// Red triangle
 	triangleR = scenegraph->createNode();
 	triangleR->setMesh(mesh);
 	triangleR->setColor(Vector4D(1.0f, 0.0f, 0.0f, 1.0f));
 	triangleR->setMatrix(translation(currentPosTriangleR) * rotation(currentRotTriangleR));
 	triangleR->setScale(scale(2.0f * M_UNITE, 0.7f, 2.0f * M_UNITE));
-	/**/
+	/** /
 	// Green triangle
 	triangleG = scenegraph->createNode();
 	triangleG->setMesh(mesh);
 	triangleG->setColor(Vector4D(0.0f, 1.0f, 0.0f, 1.0f));
 	triangleG->setMatrix(translation(currentPosTriangleG) * rotation(currentRotTriangleG));
 	triangleG->setScale(scale(2.0f, 0.9f, 2.0f));
-	/**/
+	/** /
 	// Blue triangle
 	triangleB = scenegraph->createNode();
 	triangleB->setMesh(mesh);
 	triangleB->setColor(Vector4D(0.0f, 0.0f, 1.0f, 1.0f));
 	triangleB->setMatrix(translation(currentPosTriangleB) * rotation(currentRotTriangleB));
 	triangleB->setScale(scale(1.0f, 0.5f, 1.0f));
-	/**/
+	/** /
 	// Orange triangle
 	triangleO = scenegraph->createNode();
 	triangleO->setMesh(mesh);
 	triangleO->setColor(Vector4D(1.0f, 0.5f, 0.0f, 1.0f));
 	triangleO->setMatrix(translation(currentPosTriangleO) * rotation(currentRotTriangleO));
 	triangleO->setScale(scale(2.0f, 0.8f, 2.0f));
-	/**/
+	/** /
 	// Pink triangle
 	triangleP = scenegraph->createNode();
 	triangleP->setMesh(mesh);
 	triangleP->setColor(Vector4D(1.0f, 0.0f, 0.5f, 1.0f));
 	triangleP->setMatrix(translation(currentPosTriangleP) * rotation(currentRotTriangleP));
 	triangleP->setScale(scale(1.0f, 0.5f, 1.0f));
-	/**/
+	/** /
 	// Yellow square
 	mesh = MeshManager::instance()->get("cube2");
 	cube = scenegraph->createNode();
@@ -208,7 +216,7 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	cube->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 	cube->setMatrix(translation(currentPosCube) * rotation(currentRotCube) * translation(1.0f, 0.0f, 1.0f));
 	cube->setScale(scale(1.0f, 0.95f, 1.0f));
-	/**/
+	/** /
 	// Purple parallelogram 
 	mesh = MeshManager::instance()->get("parallelogram3D");
 	parallelogram = scenegraph->createNode();
@@ -259,13 +267,13 @@ void drawSceneGraph()
 {
 	setViewProjectionMatrix();
 	groundRoot->setMatrix(translation(Position));
-	triangleR->setMatrix(translation(currentPosTriangleR) * rotation(currentRotTriangleR));
+	/*triangleR->setMatrix(translation(currentPosTriangleR) * rotation(currentRotTriangleR));
 	triangleG->setMatrix(translation(currentPosTriangleG) * rotation(currentRotTriangleG));
 	triangleB->setMatrix(translation(currentPosTriangleB) * rotation(currentRotTriangleB));
 	triangleO->setMatrix(translation(currentPosTriangleO) * rotation(currentRotTriangleO));
 	triangleP->setMatrix(translation(currentPosTriangleP) * rotation(currentRotTriangleP));
 	cube->setMatrix(translation(currentPosCube) * rotation(currentRotCube) * translation(1.0f, 0.0f, 1.0f));
-	parallelogram->setMatrix(translation(currentPosParallelogram) * rotation(currentRotParallelogram));
+	parallelogram->setMatrix(translation(currentPosParallelogram) * rotation(currentRotParallelogram));*/
 
 	ShaderProgramManager::instance()->get("stack")->BeginShader();
 	SceneGraphManager::instance()->get("main")->draw();
@@ -335,6 +343,7 @@ void cleanup()
 	MeshManager::instance()->destroy();
 	ShaderProgramManager::instance()->destroy();
 	SceneGraphManager::instance()->destroy();
+	TextureManager::instance()->destroy();
 }
 
 void display()
@@ -501,6 +510,8 @@ void init(int argc, char* argv[])
 	ASSERT_GL_ERROR("ERROR: General setup.");
 		createMeshes();
 	ASSERT_GL_ERROR("ERROR: Mesh creation.");
+		createTextures();
+	ASSERT_GL_ERROR("ERROR: Texture creation.");
 		createShaderPrograms();
 	ASSERT_GL_ERROR("ERROR: Shader creation.");
 		createScene();
