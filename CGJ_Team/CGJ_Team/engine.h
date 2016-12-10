@@ -26,6 +26,7 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Material.h"
 
 #include "ErrorHandler.h"
 

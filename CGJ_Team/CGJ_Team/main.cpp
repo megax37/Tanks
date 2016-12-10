@@ -8,6 +8,7 @@
 #include "KeyBuffer.h"
 #include "SceneGraph.h"
 #include "MeshManager.h"
+#include "MaterialManager.h"
 #include "TextureManager.h"
 #include "ShaderProgramManager.h"
 #include "SceneGraphManager.h"
@@ -60,7 +61,17 @@ void createTextures()
 	
 }
 
-/////////////////////////////////////////////////////////////////////// Mesh
+/////////////////////////////////////////////////////////////////////// Materials
+
+void createMaterials()
+{
+	Material* material;
+	material = new Material("Models/Tank/TankColour.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+	std::cout << material->MaterialName() << " Kd: " << material->Kd() << std::endl;
+}
+
+/////////////////////////////////////////////////////////////////////// Meshes
 
 void createMeshes()
 {
@@ -608,8 +619,10 @@ void init(int argc, char* argv[])
 	ASSERT_GL_ERROR("ERROR: General setup.");
 		createMeshes();
 	ASSERT_GL_ERROR("ERROR: Mesh creation.");
+		createMaterials();
+	ASSERT_GL_ERROR("ERROR: Material loading.");
 		createTextures();
-	ASSERT_GL_ERROR("ERROR: Texture creation.");
+	ASSERT_GL_ERROR("ERROR: Texture loading.");
 		createShaderPrograms();
 	ASSERT_GL_ERROR("ERROR: Shader creation.");
 		createScene();
@@ -619,6 +632,7 @@ void init(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	init(argc, argv);
+	//system("pause");
 	glutMainLoop();
 	exit(EXIT_SUCCESS);
 }

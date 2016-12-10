@@ -1,7 +1,7 @@
 # Blender MTL File: 'tank.blend'
 # Material Count: 1
 
-newmtl TankLights.001
+newmtl TankLights
 Ns 62.745098
 Ka 0.500000 0.500000 0.500000
 Kd 0.800000 0.800000 0.800000
