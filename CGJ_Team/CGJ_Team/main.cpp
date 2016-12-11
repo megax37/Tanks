@@ -5,8 +5,10 @@
 ///////////////////////////////////////////////////////////////////////
 
 #include "engine.h"
+#include "Tank.h"
 #include "KeyBuffer.h"
 #include "SceneGraph.h"
+// Managers
 #include "MeshManager.h"
 #include "MaterialManager.h"
 #include "TextureManager.h"
@@ -194,20 +196,15 @@ Quaternion currentRotParallelogram = initialRotParallelogram;
 
 /////////////////////////////////////////////////////////////////////// SceneGraph
 
-SceneNode* groundRoot, *triangleR, *triangleG, *triangleB, *triangleO, *triangleP, *tankBase, *parallelogram, *tank;
+SceneNode* groundRoot, *triangleR, *triangleG, *triangleB, *triangleO, *triangleP, *parallelogram;
 
-void createEnvironmentSceneGraph(SceneGraph* scenegraph)
+SceneNode *tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
+
+void createTankSceneGraph(SceneGraph* scenegraph)
 {
+
 	Mesh* mesh;
 	Texture* tex;
-	
-	// Ground
-	mesh = MeshManager::instance()->get("cube");
-	SceneNode *ground = scenegraph->createNode();
-	ground->setMesh(mesh);
-	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
-	ground->setMatrix(translation(0.0f, -0.25f, 0.0f));
-	ground->setScale(scale(5.0f, 0.25f, 5.0f));
 
 	// Tank
 	mesh = MeshManager::instance()->get("TankChassis");
@@ -219,66 +216,81 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 
 	mesh = MeshManager::instance()->get("TankBackWheelLeft");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	backLeftWheel = tankBase->createNode();
+	backLeftWheel->setMesh(mesh);
+	backLeftWheel->setTexture(tex);
+	backLeftWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankBackWheelRight");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	backRightWheel = tankBase->createNode();
+	backRightWheel->setMesh(mesh);
+	backRightWheel->setTexture(tex);
+	backRightWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankCaterpillarLeft");
 	tex = TextureManager::instance()->get("stone");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	SceneNode* othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setTexture(tex);
+	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankCaterpillarRight");
 	tex = TextureManager::instance()->get("stone");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setTexture(tex);
+	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankFrontWheelLeft");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	frontLeftWheel = tankBase->createNode();
+	frontLeftWheel->setMesh(mesh);
+	frontLeftWheel->setTexture(tex);
+	frontLeftWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankFrontWheelRight");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	frontRightWheel = tankBase->createNode();
+	frontRightWheel->setMesh(mesh);
+	frontRightWheel->setTexture(tex);
+	frontRightWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankLights");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setTexture(tex);
+	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankProps");
 	tex = TextureManager::instance()->get("stone");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setTexture(tex);
+	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
 
 	mesh = MeshManager::instance()->get("TankTurret");
 	tex = TextureManager::instance()->get("wood");
-	tank = tankBase->createNode();
-	tank->setMesh(mesh);
-	tank->setTexture(tex);
-	tank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	tankTurret = tankBase->createNode();
+	tankTurret->setMesh(mesh);
+	tankTurret->setTexture(tex);
+	tankTurret->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+}
+
+void createEnvironmentSceneGraph(SceneGraph* scenegraph)
+{
+	Mesh* mesh;
+	//Texture* tex;
+	
+	// Ground
+	mesh = MeshManager::instance()->get("cube");
+	SceneNode *ground = scenegraph->createNode();
+	ground->setMesh(mesh);
+	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
+	ground->setMatrix(translation(0.0f, -0.25f, 0.0f));
+	ground->setScale(scale(5.0f, 0.25f, 5.0f));
+
 
 	// Triangles
 	//mesh = MeshManager::instance()->get("triangle3D");
@@ -351,6 +363,7 @@ void createScene()
 	groundRoot->setShaderProgram(ShaderProgramManager::instance()->get("stack"));
 
 	createEnvironmentSceneGraph(scenegraph);
+	createTankSceneGraph(scenegraph);
 
 	SceneGraphManager::instance()->add("main", scenegraph);
 }

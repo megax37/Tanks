@@ -120,6 +120,8 @@
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="KeyBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="MatrixFactory.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshManager.cpp" />
@@ -138,6 +140,8 @@
     <ClInclude Include="engine.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="KeyBuffer.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MatrixFactory.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshManager.h" />
@@ -147,6 +151,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShaderProgramManager.h" />
+    <ClInclude Include="Tank.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="VectorFactory.h" />
