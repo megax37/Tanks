@@ -12,6 +12,7 @@ public:
 	Quaternion();
 	Quaternion(float t, float x, float y, float z);
 	Quaternion(float theta, Vector3D axis);
+	Quaternion(Vector3D vec);
 	~Quaternion();
 
 	friend Quaternion operator*(const Quaternion&, const Quaternion&);

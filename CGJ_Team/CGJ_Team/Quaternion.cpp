@@ -31,6 +31,14 @@ Quaternion::Quaternion(float theta, Vector3D axis)
 	if (fabs(z) < qThreshold) z = 0.0f;
 }
 
+Quaternion::Quaternion(Vector3D vec)
+{
+	this->t = 0.0f;
+	this->x = vec.x;
+	this->y = vec.y;
+	this->z = vec.z;
+}
+
 Quaternion::~Quaternion()
 {
 }

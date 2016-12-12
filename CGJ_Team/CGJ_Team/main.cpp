@@ -6,7 +6,6 @@
 
 #include "engine.h"
 #include "Tank.h"
-#include "KeyBuffer.h"
 #include "SceneGraph.h"
 // Managers
 #include "MeshManager.h"
@@ -48,6 +47,9 @@ int animationDirection = 1; // 1 - flow from initial square to final shape, -1 -
 float t = 0.0f;
 // Time update
 int lastTime = 0, elapsedTime = 0;
+
+// Tank class to encapsulate behaviour
+Tank* tankObject;
 
 /////////////////////////////////////////////////////////////////////// Textures
 
@@ -144,65 +146,12 @@ void createShaderPrograms()
 	ShaderProgramManager::instance()->add("stack", program);
 }
 
-/////////////////////////////////////////////////////////////////////// Animation positions & rotations
-// INITIAL
-Vector3D initialPosTriangleR(4.0f * M_UNITE, 0.0f, 4.0f * M_UNITE);
-Vector3D initialPosTriangleG(0.0f, 0.0f, 0.0f);
-Vector3D initialPosTriangleB(0.0f, 0.0f, 0.0f);
-Vector3D initialPosTriangleO(0.0f, 0.0f, 0.0f);
-Vector3D initialPosTriangleP(2.0f * M_UNITE, 0.0f, -2.0f * M_UNITE);
-Vector3D initialPosCube(0.0f, 0.0f, 0.0f);
-Vector3D initialPosParallelogram(-4.0f * M_UNITE, 0.0f, 4.0f * M_UNITE);
-
-Quaternion initialRotTriangleR(180.0f, AXIS3D_Y);
-Quaternion initialRotTriangleG(-135.0f, AXIS3D_Y);
-Quaternion initialRotTriangleB(45.0f, AXIS3D_Y);
-Quaternion initialRotTriangleO(135.0f, AXIS3D_Y);
-Quaternion initialRotTriangleP(-45.0f, AXIS3D_Y);
-Quaternion initialRotCube(-45.0f, AXIS3D_Y);
-Quaternion initialRotParallelogram(-90.0f, AXIS3D_Y);
-// FINAL
-Vector3D finalPosTriangleR(2.0f , 0.0f, -1.0f);
-Vector3D finalPosTriangleG(0.0f, 0.0f, 0.0f);
-Vector3D finalPosTriangleB(0.0f, 0.0f, 3.0f);
-Vector3D finalPosTriangleO(0.0f, 0.0f, 0.0f);
-Vector3D finalPosTriangleP(0.0f, 0.0f, -3.0f);
-Vector3D finalPosCube(4.0f * M_UNITE * M_UNITE, 0.0f, 0.0f);
-Vector3D finalPosParallelogram(0.0f, 0.0f, 3.0f);
-
-Quaternion finalRotTriangleR(135.0f, AXIS3D_Y);
-Quaternion finalRotTriangleG(-180.0f, AXIS3D_Y);
-Quaternion finalRotTriangleB(-45.0f, AXIS3D_Y);
-Quaternion finalRotTriangleO(90.0f, AXIS3D_Y);
-Quaternion finalRotTriangleP(-45.0f, AXIS3D_Y);
-Quaternion finalRotCube(-45.0f, AXIS3D_Y);
-Quaternion finalRotParallelogram(-135.0f, AXIS3D_Y);
-// CURRENT
-Vector3D currentPosTriangleR = initialPosTriangleR;
-Vector3D currentPosTriangleG = initialPosTriangleG;
-Vector3D currentPosTriangleB = initialPosTriangleB;
-Vector3D currentPosTriangleO = initialPosTriangleO;
-Vector3D currentPosTriangleP = initialPosTriangleP;
-Vector3D currentPosCube = initialPosCube;
-Vector3D currentPosParallelogram = initialPosParallelogram;
-
-Quaternion currentRotTriangleR = initialRotTriangleR;
-Quaternion currentRotTriangleG = initialRotTriangleG;
-Quaternion currentRotTriangleB = initialRotTriangleB;
-Quaternion currentRotTriangleO = initialRotTriangleO;
-Quaternion currentRotTriangleP = initialRotTriangleP;
-Quaternion currentRotCube = initialRotCube;
-Quaternion currentRotParallelogram = initialRotParallelogram;
-
 /////////////////////////////////////////////////////////////////////// SceneGraph
-
-SceneNode* groundRoot, *triangleR, *triangleG, *triangleB, *triangleO, *triangleP, *parallelogram;
 
 SceneNode *tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
 
 void createTankSceneGraph(SceneGraph* scenegraph)
 {
-
 	Mesh* mesh;
 	Texture* tex;
 
@@ -276,6 +225,8 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	tankTurret->setMesh(mesh);
 	tankTurret->setTexture(tex);
 	tankTurret->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+
+	tankObject = new Tank(tankBase, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, tankTurret);
 }
 
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)
@@ -290,62 +241,6 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
 	ground->setMatrix(translation(0.0f, -0.25f, 0.0f));
 	ground->setScale(scale(5.0f, 0.25f, 5.0f));
-
-
-	// Triangles
-	//mesh = MeshManager::instance()->get("triangle3D");
-	/** /
-	// Red triangle
-	triangleR = scenegraph->createNode();
-	triangleR->setMesh(mesh);
-	triangleR->setColor(Vector4D(1.0f, 0.0f, 0.0f, 1.0f));
-	triangleR->setMatrix(translation(currentPosTriangleR) * rotation(currentRotTriangleR));
-	triangleR->setScale(scale(2.0f * M_UNITE, 0.7f, 2.0f * M_UNITE));
-	/** /
-	// Green triangle
-	triangleG = scenegraph->createNode();
-	triangleG->setMesh(mesh);
-	triangleG->setColor(Vector4D(0.0f, 1.0f, 0.0f, 1.0f));
-	triangleG->setMatrix(translation(currentPosTriangleG) * rotation(currentRotTriangleG));
-	triangleG->setScale(scale(2.0f, 0.9f, 2.0f));
-	/** /
-	// Blue triangle
-	triangleB = scenegraph->createNode();
-	triangleB->setMesh(mesh);
-	triangleB->setColor(Vector4D(0.0f, 0.0f, 1.0f, 1.0f));
-	triangleB->setMatrix(translation(currentPosTriangleB) * rotation(currentRotTriangleB));
-	triangleB->setScale(scale(1.0f, 0.5f, 1.0f));
-	/** /
-	// Orange triangle
-	triangleO = scenegraph->createNode();
-	triangleO->setMesh(mesh);
-	triangleO->setColor(Vector4D(1.0f, 0.5f, 0.0f, 1.0f));
-	triangleO->setMatrix(translation(currentPosTriangleO) * rotation(currentRotTriangleO));
-	triangleO->setScale(scale(2.0f, 0.8f, 2.0f));
-	/** /
-	// Pink triangle
-	triangleP = scenegraph->createNode();
-	triangleP->setMesh(mesh);
-	triangleP->setColor(Vector4D(1.0f, 0.0f, 0.5f, 1.0f));
-	triangleP->setMatrix(translation(currentPosTriangleP) * rotation(currentRotTriangleP));
-	triangleP->setScale(scale(1.0f, 0.5f, 1.0f));
-	/** /
-	// Yellow square
-	mesh = MeshManager::instance()->get("cube2");
-	cube = scenegraph->createNode();
-	cube->setMesh(mesh);
-	cube->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
-	cube->setMatrix(translation(currentPosCube) * rotation(currentRotCube) * translation(1.0f, 0.0f, 1.0f));
-	cube->setScale(scale(1.0f, 0.95f, 1.0f));
-	/** /
-	// Purple parallelogram 
-	mesh = MeshManager::instance()->get("parallelogram3D");
-	parallelogram = scenegraph->createNode();
-	parallelogram->setMesh(mesh);
-	parallelogram->setColor(Vector4D(0.5f, 0.0f, 1.0f, 1.0f));
-	parallelogram->setMatrix(translation(currentPosParallelogram) * rotation(currentRotParallelogram));
-	parallelogram->setScale(scale(1.0f, 0.6f, 1.0f));
-	/**/
 }
 
 void createScene()
@@ -359,7 +254,7 @@ void createScene()
 	scenegraph->getCamera()->setProjectionMatrix(perspectiveMatrix(30.0f, 640.0f / 480.0f, 1.0f, 100.0f));
 	scenegraph->getCamera()->setAltProjectionMatrix(orthographicMatrix(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 100.0f));
 
-	groundRoot = scenegraph->getRoot();
+	SceneNode* groundRoot = scenegraph->getRoot();
 	groundRoot->setShaderProgram(ShaderProgramManager::instance()->get("stack"));
 
 	createEnvironmentSceneGraph(scenegraph);
@@ -388,14 +283,7 @@ void setViewProjectionMatrix()
 void drawSceneGraph()
 {
 	setViewProjectionMatrix();
-	groundRoot->setMatrix(translation(Position));
-	/*triangleR->setMatrix(translation(currentPosTriangleR) * rotation(currentRotTriangleR));
-	triangleG->setMatrix(translation(currentPosTriangleG) * rotation(currentRotTriangleG));
-	triangleB->setMatrix(translation(currentPosTriangleB) * rotation(currentRotTriangleB));
-	triangleO->setMatrix(translation(currentPosTriangleO) * rotation(currentRotTriangleO));
-	triangleP->setMatrix(translation(currentPosTriangleP) * rotation(currentRotTriangleP));
-	cube->setMatrix(translation(currentPosCube) * rotation(currentRotCube) * translation(1.0f, 0.0f, 1.0f));
-	parallelogram->setMatrix(translation(currentPosParallelogram) * rotation(currentRotParallelogram));*/
+	tankObject->move();
 
 	ShaderProgramManager::instance()->get("stack")->BeginShader();
 	SceneGraphManager::instance()->get("main")->draw();
@@ -428,7 +316,7 @@ void updateAnimation()
 		animating = false;
 	}
 
-	currentPosTriangleR = vLerp(initialPosTriangleR, finalPosTriangleR, t);
+	/*currentPosTriangleR = vLerp(initialPosTriangleR, finalPosTriangleR, t);
 	currentPosTriangleG = vLerp(initialPosTriangleG, finalPosTriangleG, t);
 	currentPosTriangleB = vLerp(initialPosTriangleB, finalPosTriangleB, t);
 	currentPosTriangleO = vLerp(initialPosTriangleO, finalPosTriangleO, t);
@@ -442,20 +330,21 @@ void updateAnimation()
 	currentRotTriangleO = qSlerp(initialRotTriangleO, finalRotTriangleO, t);
 	currentRotTriangleP = qSlerp(initialRotTriangleP, finalRotTriangleP, t);
 	currentRotCube = qSlerp(initialRotCube, finalRotCube, t);
-	currentRotParallelogram = qSlerp(initialRotParallelogram, finalRotParallelogram, t);
+	currentRotParallelogram = qSlerp(initialRotParallelogram, finalRotParallelogram, t);*/
 }
 
 void update() {
-	float vstep = 0.002f * elapsedTime;
+	/*float vstep = 0.002f * elapsedTime;
 
 	if (KeyBuffer::instance()->isKeyDown('w')) Position.z -= vstep;
 	if (KeyBuffer::instance()->isKeyDown('s')) Position.z += vstep;
 	if (KeyBuffer::instance()->isKeyDown('a')) Position.x -= vstep;
-	if (KeyBuffer::instance()->isKeyDown('d')) Position.x += vstep;
+	if (KeyBuffer::instance()->isKeyDown('d')) Position.x += vstep;*/
 	q = qFromAngleAxis(-RotationAngleY, AXIS3D_Y) * qFromAngleAxis(-RotationAngleX, AXIS3D_X) * q;
 	RotationAngleX = RotationAngleY = 0.0f;
 
-	if (animating) updateAnimation();
+	tankObject->update(elapsedTime);
+	//if (animating) updateAnimation();
 }
 
 /////////////////////////////////////////////////////////////////////// Callbacks
@@ -463,9 +352,10 @@ void update() {
 void cleanup()
 {
 	MeshManager::instance()->destroy();
+	TextureManager::instance()->destroy();
+	MaterialManager::instance()->destroy();
 	ShaderProgramManager::instance()->destroy();
 	SceneGraphManager::instance()->destroy();
-	TextureManager::instance()->destroy();
 }
 
 void display()

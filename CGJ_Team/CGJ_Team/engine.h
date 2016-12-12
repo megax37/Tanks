@@ -28,6 +28,7 @@
 #include "Texture.h"
 #include "Material.h"
 
+#include "KeyBuffer.h"
 #include "ErrorHandler.h"
 
 #endif
