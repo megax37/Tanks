@@ -26,6 +26,11 @@ void SceneNode::setTexture(Texture * tex)
 	texture = tex;
 }
 
+void SceneNode::setMaterial(Material * mat)
+{
+	material = mat;
+}
+
 void SceneNode::setMatrix(Matrix4D transform)
 {
 	modelMatrix = transform;
@@ -72,8 +77,23 @@ void SceneNode::draw(Matrix4D parentTransform)
 	Matrix4D finalMatrix = parentTransform * modelMatrix;
 	if (meshObj) {
 		glBindVertexArray(meshObj->getVaoId());
-		GLint Color_UId = shaderProgram->getUniform("Color");
-		glUniform4f(Color_UId, color.x, color.y, color.z, color.w);
+
+		if (material) {
+			GLint Diffuse_UId = shaderProgram->getUniform("DiffuseReflectivity");
+			Vector3D diffuse = material->Kd();
+			glUniform3f(Diffuse_UId, diffuse.x, diffuse.y, diffuse.z);
+
+			GLint Exponent_UId = shaderProgram->getUniform("SpecularExponent");
+			glUniform1f(Exponent_UId, material->Ns());
+
+			GLint NormalMatrix_UId = shaderProgram->getUniform("NormalMatrix");
+			Matrix3D normalMatrix = finalMatrix.toMat3().inverse().transpose();
+			glUniformMatrix3fv(NormalMatrix_UId, 1, GL_FALSE, &normalMatrix.toColumnMatrix()[0]);
+		}
+		else {
+			GLint Color_UId = shaderProgram->getUniform("Color");
+			glUniform4f(Color_UId, color.x, color.y, color.z, color.w);
+		}
 
 		GLint TexMode_UId = shaderProgram->getUniform("TexMode");
 		if (texture) {
@@ -83,6 +103,7 @@ void SceneNode::draw(Matrix4D parentTransform)
 			GLint Tex_UId = shaderProgram->getUniform("Texmap");
 			glUniform1i(Tex_UId, 0);
 		}
+
 		GLint ModelMatrix_UId = shaderProgram->getUniform("ModelMatrix");
 		glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(finalMatrix * scaleMatrix).toColumnMatrix()[0]);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)meshObj->vertices().size());
@@ -91,13 +112,13 @@ void SceneNode::draw(Matrix4D parentTransform)
 			texture->unbind();
 			glUniform1i(TexMode_UId, 0);
 		}
+		glBindVertexArray(0);
 	}
 
 	for (auto it = childrenNodes.begin(); it < childrenNodes.end(); ++it)
 	{
 		(*it)->draw(finalMatrix);
 	}
-	glBindVertexArray(0);
 
 	shaderProgram->EndShader();
 }

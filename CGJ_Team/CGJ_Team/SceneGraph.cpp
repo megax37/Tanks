@@ -31,7 +31,6 @@ void SceneGraph::setCamera(Camera * cam)
 
 void SceneGraph::draw()
 {
-
 	camera->loadMatrices();
 	root->draw(identity());
 }

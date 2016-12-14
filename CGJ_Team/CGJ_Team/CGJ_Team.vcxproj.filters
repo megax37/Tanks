@@ -139,5 +139,11 @@
     <None Include="Shaders\cube_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Shaders\tank_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\tank_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

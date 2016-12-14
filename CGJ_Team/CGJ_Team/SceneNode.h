@@ -12,6 +12,7 @@ public:
 	void setParent(SceneNode* parent);
 	void setMesh(Mesh* mesh);
 	void setTexture(Texture* tex);
+	void setMaterial(Material* mat);
 	void setMatrix(Matrix4D transform);
 	//For independent scaling, if a scaling node propagation is desired, insert it into modelMatrix transform
 	void setScale(Matrix4D scale);
@@ -31,6 +32,7 @@ private:
 	std::vector<SceneNode*> childrenNodes;
 
 	Mesh* meshObj;
+	Material* material;
 	Texture* texture;
 	Matrix4D modelMatrix;
 	Matrix4D scaleMatrix;

@@ -72,7 +72,13 @@ void createMaterials()
 	Material* material;
 	material = new Material("Models/Tank/TankColour.mtl");
 	MaterialManager::instance()->add(material->MaterialName(), material);
-	std::cout << material->MaterialName() << " Kd: " << material->Kd() << std::endl;
+
+	material = new Material("Models/Tank/TankGrey.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Tank/TankLights.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+	//std::cout << material->MaterialName() << " Kd: " << material->Kd() << std::endl;
 }
 
 /////////////////////////////////////////////////////////////////////// Meshes
@@ -129,7 +135,8 @@ void createMeshes()
 
 void createShaderPrograms()
 {
-	ShaderProgram* program = new ShaderProgram();
+	ShaderProgram* program;
+	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/cube_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/cube_fs.glsl");
 	program->addAttribute("inPosition", VERTICES);
@@ -142,6 +149,23 @@ void createShaderPrograms()
 	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP);
 	ShaderProgramManager::instance()->add("stack", program);
+
+	program = new ShaderProgram();
+	program->addShader(GL_VERTEX_SHADER, "Shaders/tank_vs.glsl");
+	program->addShader(GL_FRAGMENT_SHADER, "Shaders/tank_fs.glsl");
+	program->addAttribute("inPosition", VERTICES);
+	program->addAttribute("inTexcoord", TEXCOORDS);
+	program->addAttribute("inNormal", NORMALS);
+	program->create();
+	//program->addUniform("LightPosition");
+	program->addUniform("ModelMatrix");
+	program->addUniform("NormalMatrix");
+	program->addUniform("DiffuseReflectivity");
+	program->addUniform("SpecularExponent");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
+	program->addUniformBlock("Camera", UBO_BP);
+	ShaderProgramManager::instance()->add("tank", program);
 }
 
 /////////////////////////////////////////////////////////////////////// SceneGraph
@@ -151,78 +175,67 @@ SceneNode *tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRig
 void createTankSceneGraph(SceneGraph* scenegraph)
 {
 	Mesh* mesh;
-	Texture* tex;
+	Material* mat;
+	//Texture* tex;
 
 	// Tank
+	// Main Color material
+	ShaderProgram* shader = ShaderProgramManager::instance()->get("tank");
 	mesh = MeshManager::instance()->get("TankChassis");
-	tex = TextureManager::instance()->get("wood");
+	mat = MaterialManager::instance()->get("TankColour");
 	tankBase = scenegraph->createNode();
 	tankBase->setMesh(mesh);
-	tankBase->setTexture(tex);
-	tankBase->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	tankBase->setMaterial(mat);
+	tankBase->setShaderProgram(shader);
 
 	mesh = MeshManager::instance()->get("TankBackWheelLeft");
-	tex = TextureManager::instance()->get("wood");
 	backLeftWheel = tankBase->createNode();
 	backLeftWheel->setMesh(mesh);
-	backLeftWheel->setTexture(tex);
-	backLeftWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	backLeftWheel->setMaterial(mat);
 
 	mesh = MeshManager::instance()->get("TankBackWheelRight");
-	tex = TextureManager::instance()->get("wood");
 	backRightWheel = tankBase->createNode();
 	backRightWheel->setMesh(mesh);
-	backRightWheel->setTexture(tex);
-	backRightWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
-
-	mesh = MeshManager::instance()->get("TankCaterpillarLeft");
-	tex = TextureManager::instance()->get("stone");
-	SceneNode* othersTank = tankBase->createNode();
-	othersTank->setMesh(mesh);
-	othersTank->setTexture(tex);
-	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
-
-	mesh = MeshManager::instance()->get("TankCaterpillarRight");
-	tex = TextureManager::instance()->get("stone");
-	othersTank = tankBase->createNode();
-	othersTank->setMesh(mesh);
-	othersTank->setTexture(tex);
-	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	backRightWheel->setMaterial(mat);
 
 	mesh = MeshManager::instance()->get("TankFrontWheelLeft");
-	tex = TextureManager::instance()->get("wood");
 	frontLeftWheel = tankBase->createNode();
 	frontLeftWheel->setMesh(mesh);
-	frontLeftWheel->setTexture(tex);
-	frontLeftWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	frontLeftWheel->setMaterial(mat);
 
 	mesh = MeshManager::instance()->get("TankFrontWheelRight");
-	tex = TextureManager::instance()->get("wood");
 	frontRightWheel = tankBase->createNode();
 	frontRightWheel->setMesh(mesh);
-	frontRightWheel->setTexture(tex);
-	frontRightWheel->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
-
-	mesh = MeshManager::instance()->get("TankLights");
-	tex = TextureManager::instance()->get("wood");
-	othersTank = tankBase->createNode();
-	othersTank->setMesh(mesh);
-	othersTank->setTexture(tex);
-	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
-
-	mesh = MeshManager::instance()->get("TankProps");
-	tex = TextureManager::instance()->get("stone");
-	othersTank = tankBase->createNode();
-	othersTank->setMesh(mesh);
-	othersTank->setTexture(tex);
-	othersTank->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	frontRightWheel->setMaterial(mat);
 
 	mesh = MeshManager::instance()->get("TankTurret");
-	tex = TextureManager::instance()->get("wood");
 	tankTurret = tankBase->createNode();
 	tankTurret->setMesh(mesh);
-	tankTurret->setTexture(tex);
-	tankTurret->setColor(Vector4D(1.0f, 1.0f, 0.0f, 1.0f));
+	tankTurret->setMaterial(mat);
+
+	// Grey material
+	mat = MaterialManager::instance()->get("TankGrey");
+	mesh = MeshManager::instance()->get("TankCaterpillarLeft");
+	SceneNode* othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankCaterpillarRight");
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankProps");
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setMaterial(mat);
+	
+	// Lights material
+	mat = MaterialManager::instance()->get("TankLights");
+	mesh = MeshManager::instance()->get("TankLights");
+	othersTank = tankBase->createNode();
+	othersTank->setMesh(mesh);
+	othersTank->setMaterial(mat);
 
 	tankObject = new Tank(tankBase, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, tankTurret);
 }
@@ -280,9 +293,7 @@ void drawSceneGraph()
 	setViewProjectionMatrix();
 	tankObject->move();
 
-	ShaderProgramManager::instance()->get("stack")->BeginShader();
 	SceneGraphManager::instance()->get("main")->draw();
-	ShaderProgramManager::instance()->get("stack")->EndShader();
 }
 
 /////////////////////////////////////////////////////////////////////// Scene
