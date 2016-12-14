@@ -18,8 +18,8 @@ Tank::~Tank()
 
 void Tank::update(int elapsedTime)
 {
-	float astep = 0.055f * elapsedTime;
-	float vstep = 0.003f * elapsedTime;
+	float astep = 0.15f * elapsedTime;
+	float vstep = 0.008f * elapsedTime;
 
 	if (KeyBuffer::instance()->isKeyDown('a')) tankAngle += astep;
 	if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;

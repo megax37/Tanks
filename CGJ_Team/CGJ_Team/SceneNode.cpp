@@ -4,7 +4,7 @@ SceneNode::SceneNode()
 {
 	modelMatrix = identity();
 	scaleMatrix = modelMatrix;
-	color = Vector4D(0.0f, 0.0f, 0.0f, -1.0f);
+	color = Vector4D(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 SceneNode::~SceneNode()
@@ -67,6 +67,8 @@ void SceneNode::applyRTransform(Matrix4D transform)
 
 void SceneNode::draw(Matrix4D parentTransform)
 {
+	shaderProgram->BeginShader();
+
 	Matrix4D finalMatrix = parentTransform * modelMatrix;
 	if (meshObj) {
 		glBindVertexArray(meshObj->getVaoId());
@@ -96,6 +98,8 @@ void SceneNode::draw(Matrix4D parentTransform)
 		(*it)->draw(finalMatrix);
 	}
 	glBindVertexArray(0);
+
+	shaderProgram->EndShader();
 }
 
 void SceneNode::destroy()

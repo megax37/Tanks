@@ -12,16 +12,12 @@ uniform int TexMode;
 
 void main(void)
 {
-	//vec3 color = vec3(1.0);
 	//vec3 color = (exPosition + vec3(1.0)) * 0.5;
 	//vec3 color = vec3(exTexcoord, 0.0);
+
 	vec3 color;
 	if(TexMode == 1) {
-		//color = vec3(1.0);
 		color = vec3(texture(Texmap, exTexcoord));
-	}
-	else if(Color.w == -1.0) {
-		color = (exNormal + vec3(1.0)) * 0.5;
 	} else {
 		color = 0.75 * vec3(Color) + 0.25 * (exNormal + vec3(1.0)) * 0.5;
 	}

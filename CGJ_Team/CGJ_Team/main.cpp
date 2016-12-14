@@ -25,13 +25,13 @@ unsigned int FrameCount = 0;
 //GLuint UBO_BP = 0;
 
 const float DistanceStep = 1.5f;
-float Distance = 19.0f;
+float Distance = 25.0f;
 Vector3D Position(0.0f, 0.0f, 0.0f);
 
 int LastMousePositionX, LastMousePositionY;
-float RotationAngleY = 0.0f;
-float RotationAngleX = 55.0f;
-float yaw = 0.0f, pitch = 55.0f;
+float RotationAngleY = 45.0f;
+float RotationAngleX = 30.0f;
+float yaw = 45.0f, pitch = 30.0f;
 float startYaw, startPitch;
 
 Quaternion q;
@@ -239,8 +239,8 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
 	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
-	ground->setMatrix(translation(0.0f, -0.25f, 0.0f));
-	ground->setScale(scale(5.0f, 0.25f, 5.0f));
+	ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
+	ground->setScale(scale(15.0f, 0.1f, 15.0f));
 }
 
 void createScene()
