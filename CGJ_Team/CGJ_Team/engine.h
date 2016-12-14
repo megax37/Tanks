@@ -21,12 +21,12 @@
 #include "VectorFactory.h"
 #include "MatrixFactory.h"
 #include "Quaternion.h"
-//#include "SceneGraph.h"
 #include "Mesh.h"
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Material.h"
+//#include "SceneGraph.h"
 
 #include "KeyBuffer.h"
 #include "ErrorHandler.h"

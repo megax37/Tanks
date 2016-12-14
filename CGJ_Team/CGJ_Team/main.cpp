@@ -22,7 +22,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-//GLuint UBO_BP = 0;
+GLuint UBO_BP = 0;
 
 const float DistanceStep = 1.5f;
 float Distance = 25.0f;
@@ -135,14 +135,12 @@ void createShaderPrograms()
 	program->addAttribute("inPosition", VERTICES);
 	program->addAttribute("inTexcoord", TEXCOORDS);
 	program->addAttribute("inNormal", NORMALS);
-	//program->addUniformBlock("Camera", UBO_BP);
 	program->create();
 	program->addUniform("Color");
 	program->addUniform("ModelMatrix");
-	program->addUniform("ViewMatrix");
-	program->addUniform("ProjectionMatrix");
 	program->addUniform("Texmap");
 	program->addUniform("TexMode");
+	program->addUniformBlock("Camera", UBO_BP);
 	ShaderProgramManager::instance()->add("stack", program);
 }
 
@@ -245,11 +243,8 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 
 void createScene()
 {
-	GLint ProjectionMatrix_UId = ShaderProgramManager::instance()->get("stack")->getUniform("ProjectionMatrix");
-	GLint ViewMatrix_UId = ShaderProgramManager::instance()->get("stack")->getUniform("ViewMatrix");
-
 	SceneGraph* scenegraph = new SceneGraph();
-	scenegraph->setCamera(new Camera(ProjectionMatrix_UId, ViewMatrix_UId));
+	scenegraph->setCamera(new Camera(UBO_BP));
 
 	scenegraph->getCamera()->setProjectionMatrix(perspectiveMatrix(30.0f, 640.0f / 480.0f, 1.0f, 100.0f));
 	scenegraph->getCamera()->setAltProjectionMatrix(orthographicMatrix(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 100.0f));

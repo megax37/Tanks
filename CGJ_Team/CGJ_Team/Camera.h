@@ -7,7 +7,7 @@ class Camera
 {
 public:
 
-	Camera(GLint puId, GLint vuId);
+	Camera(GLuint ubo_bp);
 	~Camera();
 
 	void setViewMatrix(Matrix4D view);
@@ -19,6 +19,7 @@ public:
 
 private:
 	GLint ViewMatrix_UId, ProjectionMatrix_UId;
+	GLuint bufferId;
 
 	Matrix4D projectionMatrix;
 	Matrix4D secondaryProjectionMatrix;
