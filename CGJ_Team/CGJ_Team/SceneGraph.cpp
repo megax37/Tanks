@@ -29,6 +29,11 @@ void SceneGraph::setCamera(Camera * cam)
 	camera = cam;
 }
 
+void SceneGraph::setLight(DirectionalLight * light)
+{
+	directionalLight = light;
+}
+
 void SceneGraph::draw()
 {
 	camera->loadMatrices();

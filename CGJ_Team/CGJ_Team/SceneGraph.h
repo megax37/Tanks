@@ -13,6 +13,7 @@ public:
 	SceneNode* createNode();
 	Camera* getCamera();
 	void setCamera(Camera* cam);
+	void setLight(DirectionalLight* light);
 
 	void draw();
 
@@ -21,6 +22,7 @@ public:
 private:
 	SceneNode* root;
 	Camera* camera;
+	DirectionalLight* directionalLight;
 
 };
 

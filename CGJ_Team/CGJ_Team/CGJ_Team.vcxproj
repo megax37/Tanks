@@ -119,6 +119,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="KeyBuffer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="engine.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="KeyBuffer.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MatrixFactory.h" />

@@ -7,6 +7,7 @@ in vec3 inNormal;
 out vec3 exPosition;
 out vec2 exTexcoord;
 out vec3 exNormal;
+out vec3 exNormalWorld;
 out vec3 exEye;
 out vec3 exLightDir;
 
@@ -18,18 +19,23 @@ uniform Camera {
 	mat4 ProjectionMatrix;
 };
 
+uniform DirectionalLight {
+	vec3 LightDirection;
+	vec3 LightColor;
+};
+
 void main(void)
 {
 	//exPosition = inPosition;
 	exTexcoord = inTexcoord;
-	//exNormal = normalize(NormalMatrix * inNormal);
+	exNormalWorld = normalize(NormalMatrix * inNormal);
 	exNormal = normalize(vec3(transpose(inverse(ViewMatrix * ModelMatrix)) * vec4(inNormal, 1.0)));
 
 	vec4 vmPosition = ViewMatrix * ModelMatrix * vec4(inPosition, 1.0);
 
 	exPosition = vec3(vmPosition);
 	exEye = vec3(-vmPosition);
-	exLightDir = vec3(ViewMatrix * vec4(1.0, 0.5, 0.25, 0.0));
+	exLightDir = vec3(ViewMatrix * vec4(LightDirection, 0.0));
 
 	gl_Position = ProjectionMatrix * vmPosition;
 }

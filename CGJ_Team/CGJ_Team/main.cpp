@@ -23,7 +23,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-GLuint UBO_BP = 0;
+GLuint UBO_BP = 0, UBO_BP1 = 1;
 
 const float DistanceStep = 1.5f;
 float Distance = 25.0f;
@@ -160,6 +160,7 @@ void createShaderPrograms()
 	program->addUniform("Texmap");
 	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP);
+	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("stack", program);
 
 	program = new ShaderProgram();
@@ -169,7 +170,6 @@ void createShaderPrograms()
 	program->addAttribute("inTexcoord", TEXCOORDS);
 	program->addAttribute("inNormal", NORMALS);
 	program->create();
-	//program->addUniform("LightPosition");
 	program->addUniform("ModelMatrix");
 	program->addUniform("NormalMatrix");
 	program->addUniform("DiffuseReflectivity");
@@ -178,6 +178,7 @@ void createShaderPrograms()
 	program->addUniform("Texmap");
 	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP);
+	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("tank", program);
 }
 
@@ -277,6 +278,9 @@ void createScene()
 
 	scenegraph->getCamera()->setProjectionMatrix(perspectiveMatrix(30.0f, 640.0f / 480.0f, 1.0f, 100.0f));
 	scenegraph->getCamera()->setAltProjectionMatrix(orthographicMatrix(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 100.0f));
+
+	//scenegraph->setLight(new DirectionalLight(Vector3D(1.0f, 0.6f, 0.25f), Vector3D(0.8f, 0.47f, 0.18f), UBO_BP1));
+	scenegraph->setLight(new DirectionalLight(Vector3D(1.0f, 0.6f, 0.25f), Vector3D(0.94f, 0.78f, 0.27f), UBO_BP1));
 
 	SceneNode* groundRoot = scenegraph->getRoot();
 	groundRoot->setShaderProgram(ShaderProgramManager::instance()->get("stack"));

@@ -25,7 +25,6 @@ void Tank::update(int elapsedTime)
 	if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
 	if (KeyBuffer::instance()->isKeyDown('w')) position = position + front * vstep;
 	if (KeyBuffer::instance()->isKeyDown('s')) position = position - front * vstep;
-	if (KeyBuffer::instance()->isKeyDown('q')) ;
 
 	Quaternion qr(tankAngle, AXIS3D_Y);
 	Quaternion qi(AXIS3D_Z);

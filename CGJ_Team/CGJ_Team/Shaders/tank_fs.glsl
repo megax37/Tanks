@@ -3,6 +3,7 @@
 in vec3 exPosition;
 in vec2 exTexcoord;
 in vec3 exNormal;
+in vec3 exNormalWorld;
 in vec3 exEye;
 in vec3 exLightDir;
 
@@ -12,8 +13,19 @@ uniform vec3 DiffuseReflectivity;
 uniform vec3 SpecularReflectivity;
 uniform float SpecularExponent;
 
+vec3 topHemisphere = vec3(0.0, 1.0, 0.0);
+vec3 skyColor = vec3(0.6f, 0.8f, 0.9f);
+//vec3 groundColor = vec3(0.761f, 0.698f, 0.502f);
+vec3 groundColor = vec3(1.0f, 0.843f, 0.0f);
+const float PI = 3.141592653589793238462643383;
+
 uniform sampler2D Texmap;
 uniform int TexMode;
+
+uniform DirectionalLight {
+	vec3 LightDirection;
+	vec3 LightColor;
+};
 
 void main(void)
 {
@@ -26,8 +38,8 @@ void main(void)
 	//vec3 L = normalize(exLightDir - exPosition);
 	vec3 E = normalize(exEye);
 
-	float intensity = max(dot(L, N), 0.0);
-	color = DiffuseReflectivity * intensity * 0.9 + 0.1 * vec3(1.0);
+	float intensity = max(dot(L, N), 0.05);
+	color = mix(DiffuseReflectivity * intensity, LightColor, 0.1);
 
 	if(intensity > 0.0) {
 		vec3 H = normalize(L + E);
@@ -38,8 +50,18 @@ void main(void)
 		/* GAUSSIAN DISTRIBUTION SPECULAR */
 		float alpha = acos(dot(H, N));
 		float m = smoothstep(1, 1000.0, SpecularExponent * 6);
-		color = color + SpecularReflectivity * exp(-pow(alpha / m, 2.0));
+		color = color + mix(SpecularReflectivity, LightColor, 0.2) * exp(-pow(alpha / m, 2.0));
 	}
+
+	/* HEMISPHERE AMBIENT LIGHTING */
+	float theta = acos(dot(topHemisphere, normalize(exNormalWorld)));
+	float factor;
+	if(theta < PI / 2.0) {
+		factor = 1.0 - 0.5 * sin(theta);
+	} else {
+		factor = 0.5 * sin(theta);
+	}
+	color = mix(color, mix(groundColor, skyColor, factor), 0.3);
 
 	FragmentColor = vec4(color,1.0);
 }

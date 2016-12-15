@@ -24,6 +24,7 @@
 #include "Mesh.h"
 #include "ShaderProgram.h"
 #include "Camera.h"
+#include "DirectionalLight.h"
 #include "Texture.h"
 #include "Material.h"
 //#include "SceneGraph.h"
