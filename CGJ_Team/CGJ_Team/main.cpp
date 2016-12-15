@@ -62,6 +62,9 @@ void createTextures()
 
 	texture = new Texture("Textures/stone.tga");
 	TextureManager::instance()->add("stone", texture);
+
+	texture = new Texture("Textures/desert.jpg");
+	TextureManager::instance()->add("desert", texture);
 	
 }
 
@@ -243,12 +246,15 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 {
 	Mesh* mesh;
-	//Texture* tex;
+	Texture* tex;
 	
 	// Ground
 	mesh = MeshManager::instance()->get("cube");
+	tex = TextureManager::instance()->get("desert");
+
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
+	ground->setTexture(tex);
 	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
 	ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
 	ground->setScale(scale(15.0f, 0.1f, 15.0f));
