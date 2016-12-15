@@ -12,6 +12,7 @@ public:
 	~Bullet();
 
 	void update(int elapsedTime);
+	bool isToDestroy();
 	void move();
 private:
 
@@ -22,6 +23,9 @@ private:
 
 	Vector3D position, front;
 	float angle = 0; 
+	
+	float timeToDestroy;
+	bool destroy;
 
 	Vector3D AXIS3D_X = Vector3D(1.0f, 0.0f, 0.0f);
 	Vector3D AXIS3D_Y = Vector3D(0.0f, 1.0f, 0.0f);

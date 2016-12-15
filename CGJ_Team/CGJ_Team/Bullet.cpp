@@ -6,10 +6,14 @@ Bullet::Bullet(SceneNode * bulletSceneNode, Vector3D initialPosition, Vector3D f
 	position = initialPosition;
 	front = frontVector;
 	angle = tankAngle;
+
+	timeToDestroy = 5000.0f;
+	destroy = false;
 }
 
 Bullet::~Bullet()
 {
+	delete bullet;
 }
 
 void Bullet::update(int elapsedTime)
@@ -18,6 +22,13 @@ void Bullet::update(int elapsedTime)
 	float vstep = 0.008f * elapsedTime;
 
 	position = position + front * vstep;
+
+	timeToDestroy -= elapsedTime;
+}
+
+bool Bullet::isToDestroy()
+{
+	return timeToDestroy < 0.0f;
 }
 
 void Bullet::move()

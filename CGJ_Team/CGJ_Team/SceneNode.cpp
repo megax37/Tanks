@@ -9,6 +9,7 @@ SceneNode::SceneNode()
 
 SceneNode::~SceneNode()
 {
+	if(parentNode != NULL) parentNode->removeChildNode(this);
 }
 
 void SceneNode::setParent(SceneNode * parent)
@@ -58,6 +59,18 @@ SceneNode * SceneNode::createNode()
 	child->setShaderProgram(shaderProgram);
 	childrenNodes.push_back(child);
 	return child;
+}
+
+void SceneNode::removeChildNode(SceneNode * node) {
+
+	for (int i = 0; i < childrenNodes.size(); i++)
+	{
+		if(childrenNodes[i] == node)
+		{
+			childrenNodes.erase(childrenNodes.begin() + i);
+			break;
+		}
+	}
 }
 
 void SceneNode::applyLTransform(Matrix4D transform)

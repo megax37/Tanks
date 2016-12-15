@@ -39,6 +39,9 @@ private:
 	Vector4D color;
 	ShaderProgram* shaderProgram;
 
+	void removeChildNode(SceneNode * node);
+
+
 	//Matrix4D getFinalTransform();
 };
 

@@ -19,6 +19,17 @@ void BulletManager::update(int elapsedTime) {
 		timeBuffer = 0;
 	}
 	else shooting = false;
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		if(bullets[i]->isToDestroy())
+		{
+			Bullet * b = bullets[i];
+			bullets.erase(bullets.begin() + i);
+			delete b;
+			break;
+		}
+	}
 	for each (Bullet * bullet in bullets)
 	{
 		bullet->update(elapsedTime);
