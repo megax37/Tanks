@@ -83,6 +83,10 @@ void SceneNode::draw(Matrix4D parentTransform)
 			Vector3D diffuse = material->Kd();
 			glUniform3f(Diffuse_UId, diffuse.x, diffuse.y, diffuse.z);
 
+			GLint Specular_UId = shaderProgram->getUniform("SpecularReflectivity");
+			Vector3D specular = material->Ks();
+			glUniform3f(Specular_UId, specular.x, specular.y, specular.z);
+
 			GLint Exponent_UId = shaderProgram->getUniform("SpecularExponent");
 			glUniform1f(Exponent_UId, material->Ns());
 

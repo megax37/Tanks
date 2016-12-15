@@ -7,6 +7,8 @@ in vec3 inNormal;
 out vec3 exPosition;
 out vec2 exTexcoord;
 out vec3 exNormal;
+out vec3 exEye;
+out vec3 exLightDir;
 
 uniform mat4 ModelMatrix;
 uniform mat3 NormalMatrix;
@@ -18,10 +20,16 @@ uniform Camera {
 
 void main(void)
 {
-	exPosition = inPosition;
+	//exPosition = inPosition;
 	exTexcoord = inTexcoord;
-	exNormal = NormalMatrix * inNormal;
+	//exNormal = normalize(NormalMatrix * inNormal);
+	exNormal = normalize(vec3(transpose(inverse(ViewMatrix * ModelMatrix)) * vec4(inNormal, 1.0)));
 
-	vec4 MCPosition = vec4(inPosition, 1.0);
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * MCPosition;
+	vec4 vmPosition = ViewMatrix * ModelMatrix * vec4(inPosition, 1.0);
+
+	exPosition = vec3(vmPosition);
+	exEye = vec3(-vmPosition);
+	exLightDir = -vec3(ViewMatrix * vec4(1.0, 0.5, 0.25, 1.0));
+
+	gl_Position = ProjectionMatrix * vmPosition;
 }
