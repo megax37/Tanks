@@ -6,6 +6,7 @@
 
 #include "engine.h"
 #include "Tank.h"
+#include "BulletManager.h"
 #include "SceneGraph.h"
 // Managers
 #include "MeshManager.h"
@@ -50,6 +51,7 @@ int lastTime = 0, elapsedTime = 0;
 
 // Tank class to encapsulate behaviour
 Tank* tankObject;
+BulletManager * bulletManager;
 
 /////////////////////////////////////////////////////////////////////// Textures
 
@@ -80,6 +82,9 @@ void createMaterials()
 	MaterialManager::instance()->add(material->MaterialName(), material);
 
 	material = new Material("Models/Tank/TankLights.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Bullet.mtl");
 	MaterialManager::instance()->add(material->MaterialName(), material);
 	//std::cout << material->MaterialName() << " Kd: " << material->Kd() << std::endl;
 }
@@ -132,6 +137,10 @@ void createMeshes()
 	mesh = new Mesh("Models/Tank/TankTurret.obj");
 	mesh->create();
 	MeshManager::instance()->add("TankTurret", mesh);
+
+	mesh = new Mesh("Models/Bullet.obj");
+	mesh->create();
+	MeshManager::instance()->add("Bullet", mesh);
 }
 
 /////////////////////////////////////////////////////////////////////// Shaders
@@ -274,6 +283,7 @@ void createScene()
 	createEnvironmentSceneGraph(scenegraph);
 	createTankSceneGraph(scenegraph);
 
+	bulletManager = new BulletManager(groundRoot);
 	SceneGraphManager::instance()->add("main", scenegraph);
 }
 
@@ -298,7 +308,7 @@ void drawSceneGraph()
 {
 	setViewProjectionMatrix();
 	tankObject->move();
-
+	bulletManager->move();
 	SceneGraphManager::instance()->get("main")->draw();
 }
 
@@ -355,7 +365,10 @@ void update() {
 	q = qFromAngleAxis(-RotationAngleY, AXIS3D_Y) * qFromAngleAxis(-RotationAngleX, AXIS3D_X) * q;
 	RotationAngleX = RotationAngleY = 0.0f;
 
+	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getFront(), tankObject->getAngle());
+
 	tankObject->update(elapsedTime);
+	bulletManager->update(elapsedTime);
 	//if (animating) updateAnimation();
 }
 
@@ -484,7 +497,7 @@ void setupCallbacks()
 
 void setupOpenGL() {
 	std::cerr << "CONTEXT: OpenGL v" << glGetString(GL_VERSION) << std::endl;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.6f, 0.8f, 0.9f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);

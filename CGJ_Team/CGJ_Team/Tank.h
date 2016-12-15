@@ -2,8 +2,8 @@
 #define _TANK_
 
 #include "SceneNode.h"
-
-class Tank
+#include "Object.h"
+class Tank : Object
 {
 public:
 	Tank(SceneNode* tankBase, SceneNode* frontLeftWheel, SceneNode* frontRightWheel, SceneNode* backLeftWheel, SceneNode* backRightWheel, SceneNode* tankTurret);
@@ -11,7 +11,11 @@ public:
 
 	void update(int elapsedTime);
 	void move();
+	Vector3D getPosition();
+	Vector3D getFront();
+	float getAngle();
 
+	
 private:
 
 	SceneNode* tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
@@ -20,6 +24,7 @@ private:
 	float aspeed = 0.05f;
 
 	Vector3D position, front;
+
 	float tankAngle = 0.0f;
 	float turretAngle = 0.0f;
 
