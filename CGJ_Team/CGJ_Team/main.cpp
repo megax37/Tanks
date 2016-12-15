@@ -173,6 +173,7 @@ void createShaderPrograms()
 	program->addUniform("ModelMatrix");
 	program->addUniform("NormalMatrix");
 	program->addUniform("DiffuseReflectivity");
+	program->addUniform("SpecularReflectivity");
 	program->addUniform("SpecularExponent");
 	program->addUniform("Texmap");
 	program->addUniform("TexMode");
