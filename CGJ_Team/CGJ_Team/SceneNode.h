@@ -16,6 +16,7 @@ public:
 	void setMatrix(Matrix4D transform);
 	//For independent scaling, if a scaling node propagation is desired, insert it into modelMatrix transform
 	void setScale(Matrix4D scale);
+	void setRotation(Matrix4D rotation);
 	void setColor(Vector4D matColor);
 	void setShaderProgram(ShaderProgram* shader);
 
@@ -36,6 +37,7 @@ private:
 	Texture* texture;
 	Matrix4D modelMatrix;
 	Matrix4D scaleMatrix;
+	Matrix4D rotationMatrix;
 	Vector4D color;
 	ShaderProgram* shaderProgram;
 

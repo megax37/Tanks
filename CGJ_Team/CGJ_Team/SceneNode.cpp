@@ -4,6 +4,7 @@ SceneNode::SceneNode()
 {
 	modelMatrix = identity();
 	scaleMatrix = modelMatrix;
+	rotationMatrix = modelMatrix;
 	color = Vector4D(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -40,6 +41,11 @@ void SceneNode::setMatrix(Matrix4D transform)
 void SceneNode::setScale(Matrix4D scale)
 {
 	scaleMatrix = scale;
+}
+
+void SceneNode::setRotation(Matrix4D rotation)
+{
+	rotationMatrix = rotation;
 }
 
 void SceneNode::setColor(Vector4D matColor)
@@ -122,7 +128,7 @@ void SceneNode::draw(Matrix4D parentTransform)
 		}
 
 		GLint ModelMatrix_UId = shaderProgram->getUniform("ModelMatrix");
-		glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(finalMatrix * scaleMatrix).toColumnMatrix()[0]);
+		glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(finalMatrix * scaleMatrix * rotationMatrix).toColumnMatrix()[0]);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)meshObj->vertices().size());
 
 		if (texture) {

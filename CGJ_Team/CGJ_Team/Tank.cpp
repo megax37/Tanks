@@ -25,16 +25,23 @@ void Tank::update(int elapsedTime)
 	if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
 	if (KeyBuffer::instance()->isKeyDown('w')) position = position + front * vstep;
 	if (KeyBuffer::instance()->isKeyDown('s')) position = position - front * vstep;
+	if (KeyBuffer::instance()->isKeyDown('z')) turretAngle += astep;
+	if (KeyBuffer::instance()->isKeyDown('x')) turretAngle -= astep;
 
 	Quaternion qr(tankAngle, AXIS3D_Y);
 	Quaternion qi(AXIS3D_Z);
 	Quaternion qf = qr * qi * qInverse(qr);
 	front = Vector3D(qf.x, qf.y, qf.z);
+	Quaternion turretQR(turretAngle + tankAngle, AXIS3D_Y);
+	Quaternion turretQI(AXIS3D_Z);
+	Quaternion turretQ = turretQR * turretQI * qInverse(turretQR);
+	turretFront = Vector3D(turretQ.x, turretQ.y, turretQ.z);
 }
 
 void Tank::move()
 {
 	tankBase->setMatrix(translation(position) * rotation(tankAngle, AXIS3D_Y));
+	tankTurret->setRotation(rotation(turretAngle, AXIS3D_Y));
 }
 
 Vector3D Tank::getPosition() {
@@ -44,6 +51,10 @@ Vector3D Tank::getFront() {
 	return front;
 }
 
+Vector3D Tank::getTurretFront() {
+	return turretFront;
+}
+
 float Tank::getAngle() {
-	return tankAngle;
+	return turretAngle + tankAngle;
 }

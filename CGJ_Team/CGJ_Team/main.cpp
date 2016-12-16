@@ -8,7 +8,7 @@
 #include "Tank.h"
 #include "BulletManager.h"
 #include "SceneGraph.h"
-// Managers
+// Managersdddo
 #include "MeshManager.h"
 #include "MaterialManager.h"
 #include "TextureManager.h"
@@ -370,7 +370,7 @@ void update() {
 	q = qFromAngleAxis(-RotationAngleY, AXIS3D_Y) * qFromAngleAxis(-RotationAngleX, AXIS3D_X) * q;
 	RotationAngleX = RotationAngleY = 0.0f;
 
-	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getFront(), tankObject->getAngle());
+	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getTurretFront(), tankObject->getAngle());
 
 	tankObject->update(elapsedTime);
 	bulletManager->update(elapsedTime);

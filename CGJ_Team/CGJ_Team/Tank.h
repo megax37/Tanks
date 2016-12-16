@@ -13,6 +13,7 @@ public:
 	void move();
 	Vector3D getPosition();
 	Vector3D getFront();
+	Vector3D getTurretFront();
 	float getAngle();
 
 	
@@ -23,7 +24,7 @@ private:
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;
 
-	Vector3D position, front;
+	Vector3D position, front, turretFront;
 
 	float tankAngle = 0.0f;
 	float turretAngle = 0.0f;
