@@ -1,6 +1,8 @@
 #ifndef _MESH_
 #define _MESH_
 
+class ShaderProgram;
+
 #include "engine.h"
 
 /// Types of Vertex Attributes
@@ -55,14 +57,16 @@ public:
 	~Mesh();
 
 	void create();
-	int getVaoId();
+	//int getVaoId();
 
-	std::vector<Vertex> vertices();
+	void draw(ShaderProgram* shader, Matrix4D transform);
+
+	/*std::vector<Vertex> vertices();
 	std::vector<Texcoord> texcoords();
 	std::vector<Normal> normals();
 
 	bool isTexcoordsLoaded();
-	bool isNormalsLoaded();
+	bool isNormalsLoaded();*/
 };
 
 #endif

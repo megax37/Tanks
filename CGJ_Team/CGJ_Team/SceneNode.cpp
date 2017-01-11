@@ -4,13 +4,13 @@ SceneNode::SceneNode()
 {
 	modelMatrix = identity();
 	scaleMatrix = modelMatrix;
-	rotationMatrix = modelMatrix;
 	color = Vector4D(1.0f, 1.0f, 1.0f, 1.0f);
+	visible = true;
 }
 
 SceneNode::~SceneNode()
 {
-	if(parentNode != NULL) parentNode->removeChildNode(this);
+	//if(parentNode != NULL) parentNode->removeChildNode(this);
 }
 
 void SceneNode::setParent(SceneNode * parent)
@@ -43,11 +43,6 @@ void SceneNode::setScale(Matrix4D scale)
 	scaleMatrix = scale;
 }
 
-void SceneNode::setRotation(Matrix4D rotation)
-{
-	rotationMatrix = rotation;
-}
-
 void SceneNode::setColor(Vector4D matColor)
 {
 	color = matColor;
@@ -56,6 +51,16 @@ void SceneNode::setColor(Vector4D matColor)
 void SceneNode::setShaderProgram(ShaderProgram * shader)
 {
 	shaderProgram = shader;
+}
+
+void SceneNode::setVisible(bool flag)
+{
+	visible = flag;
+}
+
+bool SceneNode::isVisible()
+{
+	return visible;
 }
 
 SceneNode * SceneNode::createNode()
@@ -69,14 +74,14 @@ SceneNode * SceneNode::createNode()
 
 void SceneNode::removeChildNode(SceneNode * node) {
 
-	for (int i = 0; i < childrenNodes.size(); i++)
+	/*for (int i = 0; i < childrenNodes.size(); i++)
 	{
 		if(childrenNodes[i] == node)
 		{
 			childrenNodes.erase(childrenNodes.begin() + i);
 			break;
 		}
-	}
+	}*/
 }
 
 void SceneNode::applyLTransform(Matrix4D transform)
@@ -94,8 +99,8 @@ void SceneNode::draw(Matrix4D parentTransform)
 	shaderProgram->BeginShader();
 
 	Matrix4D finalMatrix = parentTransform * modelMatrix;
-	if (meshObj) {
-		glBindVertexArray(meshObj->getVaoId());
+	if (visible && meshObj) {
+		//glBindVertexArray(meshObj->getVaoId());
 
 		if (material) {
 			GLint Diffuse_UId = shaderProgram->getUniform("DiffuseReflectivity");
@@ -127,10 +132,13 @@ void SceneNode::draw(Matrix4D parentTransform)
 			glUniform1i(Tex_UId, 0);
 		}
 
-		GLint ModelMatrix_UId = shaderProgram->getUniform("ModelMatrix");
-		glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(finalMatrix * scaleMatrix * rotationMatrix).toColumnMatrix()[0]);
-		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)meshObj->vertices().size());
+		meshObj->draw(shaderProgram, finalMatrix * scaleMatrix);
 
+/** /
+		GLint ModelMatrix_UId = shaderProgram->getUniform("ModelMatrix");
+		glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(finalMatrix * scaleMatrix).toColumnMatrix()[0]);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)meshObj->vertices().size());
+/**/
 		if (texture) {
 			texture->unbind();
 			glUniform1i(TexMode_UId, 0);

@@ -20,7 +20,7 @@ void BulletManager::update(int elapsedTime) {
 	}
 	else shooting = false;
 
-	for (int i = 0; i < bullets.size(); i++)
+	/*for (int i = 0; i < bullets.size(); i++)
 	{
 		if(bullets[i]->isToDestroy())
 		{
@@ -29,7 +29,7 @@ void BulletManager::update(int elapsedTime) {
 			delete b;
 			break;
 		}
-	}
+	}*/
 	for each (Bullet * bullet in bullets)
 	{
 		bullet->update(elapsedTime);

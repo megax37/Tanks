@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _OBJECT_
 #define _OBJECT_
 

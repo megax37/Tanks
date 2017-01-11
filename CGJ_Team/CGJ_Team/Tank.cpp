@@ -41,7 +41,7 @@ void Tank::update(int elapsedTime)
 void Tank::move()
 {
 	tankBase->setMatrix(translation(position) * rotation(tankAngle, AXIS3D_Y));
-	tankTurret->setRotation(rotation(turretAngle, AXIS3D_Y));
+	tankTurret->setMatrix(rotation(turretAngle, AXIS3D_Y));
 }
 
 Vector3D Tank::getPosition() {
