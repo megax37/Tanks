@@ -288,7 +288,7 @@ void createScene()
 	createEnvironmentSceneGraph(scenegraph);
 	createTankSceneGraph(scenegraph);
 
-	bulletManager = new BulletManager(groundRoot);
+	bulletManager = new BulletManager(groundRoot, 5);
 	SceneGraphManager::instance()->add("main", scenegraph);
 }
 

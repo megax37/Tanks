@@ -1,29 +1,38 @@
 #include "Bullet.h"
 
-Bullet::Bullet(SceneNode * bulletSceneNode, Vector3D initialPosition, Vector3D frontVector, float tankAngle)
+Bullet::Bullet(SceneNode * bulletSceneNode)
 {
 	bullet = bulletSceneNode;
-	position = initialPosition;
-	front = frontVector;
+	fired = false;
+
+	/*position = initialPosition;
+	frontVector.y += 0.2f;
+	velocity = frontVector;
 	angle = tankAngle;
 
 	timeToDestroy = 5000.0f;
-	destroy = false;
+	destroy = false;*/
 }
 
 Bullet::~Bullet()
 {
-	delete bullet;
+	//delete bullet;
 }
 
 void Bullet::update(int elapsedTime)
 {
-	float astep = 0.15f * elapsedTime;
-	float vstep = 0.008f * elapsedTime;
+	float gravity = 0.0002f * elapsedTime;
+	float vstep = 0.009f * elapsedTime;
 
-	position = position + front * vstep;
+	position = position + velocity * vstep;
+	velocity.y -= gravity;
 
-	timeToDestroy -= elapsedTime;
+	if (position.y <= 0.0f) {
+		bullet->setVisible(false);
+		this->disable();
+	}
+
+	//timeToDestroy -= elapsedTime;
 }
 
 bool Bullet::isToDestroy()
@@ -34,6 +43,37 @@ bool Bullet::isToDestroy()
 void Bullet::move()
 {
 	bullet->setMatrix(translation(position) * rotation(angle, AXIS3D_Y));
+}
+
+void Bullet::setPosition(Vector3D pos)
+{
+	position = pos;
+}
+
+void Bullet::setVelocity(Vector3D vel)
+{
+	velocity = vel;
+}
+
+void Bullet::setAngle(float theta)
+{
+	angle = theta;
+}
+
+void Bullet::enable()
+{
+	fired = true;
+	bullet->setVisible(true);
+}
+
+void Bullet::disable()
+{
+	fired = false;
+}
+
+bool Bullet::isFired()
+{
+	return fired;
 }
 
 

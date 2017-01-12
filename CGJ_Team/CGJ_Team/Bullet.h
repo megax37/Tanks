@@ -8,12 +8,21 @@
 class Bullet : Object
 {
 public:
-	Bullet(SceneNode * bulletSceneNode, Vector3D initialPosition, Vector3D frontVector, float angle);
+	Bullet(SceneNode * bulletSceneNode);
 	~Bullet();
 
 	void update(int elapsedTime);
 	bool isToDestroy();
 	void move();
+
+	void setPosition(Vector3D pos);
+	void setVelocity(Vector3D vel);
+	void setAngle(float theta);
+
+	void enable();
+	void disable();
+	bool isFired();
+
 private:
 
 	SceneNode* bullet;
@@ -21,9 +30,11 @@ private:
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;
 
-	Vector3D position, front;
+	Vector3D position, velocity;
 	float angle = 0; 
 	
+	bool fired;
+
 	float timeToDestroy;
 	bool destroy;
 
