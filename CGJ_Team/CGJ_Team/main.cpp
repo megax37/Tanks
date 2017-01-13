@@ -51,7 +51,9 @@ int lastTime = 0, elapsedTime = 0;
 
 // Tank class to encapsulate behaviour
 Tank* tankObject;
+Tank* tankObject2;
 BulletManager * bulletManager;
+BulletManager * bulletManager2;
 
 /////////////////////////////////////////////////////////////////////// Textures
 
@@ -190,6 +192,7 @@ void createShaderPrograms()
 /////////////////////////////////////////////////////////////////////// SceneGraph
 
 SceneNode *tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
+SceneNode *tankBase2, *frontLeftWheel2, *frontRightWheel2, *backLeftWheel2, *backRightWheel2, *tankTurret2;
 
 void createTankSceneGraph(SceneGraph* scenegraph)
 {
@@ -256,7 +259,66 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	othersTank->setMesh(mesh);
 	othersTank->setMaterial(mat);
 
-	tankObject = new Tank(tankBase, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, tankTurret);
+	// Tank 2
+	// Main Color material
+	mesh = MeshManager::instance()->get("TankChassis");
+	mat = MaterialManager::instance()->get("TankColour");
+	tankBase2 = scenegraph->createNode();
+	tankBase2->setMesh(mesh);
+	tankBase2->setMaterial(mat);
+	tankBase2->setShaderProgram(shader);
+
+	mesh = MeshManager::instance()->get("TankBackWheelLeft");
+	backLeftWheel2 = tankBase2->createNode();
+	backLeftWheel2->setMesh(mesh);
+	backLeftWheel2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankBackWheelRight");
+	backRightWheel2 = tankBase2->createNode();
+	backRightWheel2->setMesh(mesh);
+	backRightWheel2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankFrontWheelLeft");
+	frontLeftWheel2 = tankBase2->createNode();
+	frontLeftWheel2->setMesh(mesh);
+	frontLeftWheel2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankFrontWheelRight");
+	frontRightWheel2 = tankBase2->createNode();
+	frontRightWheel2->setMesh(mesh);
+	frontRightWheel2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankTurret");
+	tankTurret2 = tankBase2->createNode();
+	tankTurret2->setMesh(mesh);
+	tankTurret2->setMaterial(mat);
+
+	// Grey material
+	mat = MaterialManager::instance()->get("TankGrey");
+	mesh = MeshManager::instance()->get("TankCaterpillarLeft");
+	SceneNode* othersTank2 = tankBase2->createNode();
+	othersTank2->setMesh(mesh);
+	othersTank2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankCaterpillarRight");
+	othersTank2 = tankBase2->createNode();
+	othersTank2->setMesh(mesh);
+	othersTank2->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankProps");
+	othersTank2 = tankBase2->createNode();
+	othersTank2->setMesh(mesh);
+	othersTank2->setMaterial(mat);
+
+	// Lights material
+	mat = MaterialManager::instance()->get("TankLights");
+	mesh = MeshManager::instance()->get("TankLights");
+	othersTank2 = tankBase2->createNode();
+	othersTank2->setMesh(mesh);
+	othersTank2->setMaterial(mat);
+
+	tankObject = new Tank(tankBase, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, tankTurret, 1);
+	tankObject2 = new Tank(tankBase2, frontLeftWheel2, frontRightWheel2, backLeftWheel2, backRightWheel2, tankTurret2, 2);
 }
 
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)
@@ -296,6 +358,7 @@ void createScene()
 	createTankSceneGraph(scenegraph);
 
 	bulletManager = new BulletManager(groundRoot, 5);
+	bulletManager2 = new BulletManager(groundRoot, 5);
 	SceneGraphManager::instance()->add("main", scenegraph);
 }
 
@@ -320,7 +383,9 @@ void drawSceneGraph()
 {
 	setViewProjectionMatrix();
 	tankObject->move();
+	tankObject2->move();
 	bulletManager->move();
+	bulletManager2->move();
 	SceneGraphManager::instance()->get("main")->draw();
 }
 
@@ -373,9 +438,12 @@ void update() {
 	RotationAngleX = RotationAngleY = 0.0f;
 
 	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getTurretFront(), tankObject->getAngle());
+	if (KeyBuffer::instance()->isKeyDown('2')) bulletManager2->shoot(tankObject2->getPosition(), tankObject2->getTurretFront(), tankObject2->getAngle());
 
 	tankObject->update(elapsedTime);
+	tankObject2->update(elapsedTime);
 	bulletManager->update(elapsedTime);
+	bulletManager2->update(elapsedTime);
 	//if (animating) updateAnimation();
 }
 
@@ -437,6 +505,16 @@ void keyboard_up(unsigned char key, int x, int y)
 	KeyBuffer::instance()->releaseKey(key);
 }
 
+void special_down(int key, int x, int y)
+{
+	KeyBuffer::instance()->pressSpecialKey(key);
+}
+
+void special_up(int key, int x, int y)
+{
+	KeyBuffer::instance()->releaseSpecialKey(key);
+}
+
 void mouse(int button, int state, int x, int y)
 {
 	LastMousePositionX = x;
@@ -494,6 +572,8 @@ void setupCallbacks()
 	glutIdleFunc(idle);
 	glutKeyboardFunc(keyboard_down);
 	glutKeyboardUpFunc(keyboard_up);
+	glutSpecialFunc(special_down);
+	glutSpecialUpFunc(special_up);
 	glutMouseFunc(mouse);
 	glutMotionFunc(mouseMotion);
 	glutMouseWheelFunc(mouseWheel);

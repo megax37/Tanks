@@ -1,6 +1,6 @@
 #include "Tank.h"
 
-Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode * BLwheel, SceneNode * BRwheel, SceneNode * turret)
+Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode * BLwheel, SceneNode * BRwheel, SceneNode * turret, int player)
 {
 	tankBase = base;
 	frontLeftWheel = FLwheel;
@@ -9,7 +9,12 @@ Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode
 	backRightWheel = BRwheel;
 	tankTurret = turret;
 
-	position = Vector3D();
+	playerNumber = player;
+
+	if (playerNumber == 1)
+		position = Vector3D(1.0f, 0.0f, 1.0f);
+	if (playerNumber == 2)
+		position = Vector3D(-1.0f, 0.0f, -1.0f);
 }
 
 Tank::~Tank()
@@ -21,12 +26,22 @@ void Tank::update(int elapsedTime)
 	float astep = 0.15f * elapsedTime;
 	float vstep = 0.008f * elapsedTime;
 
-	if (KeyBuffer::instance()->isKeyDown('a')) tankAngle += astep;
-	if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
-	if (KeyBuffer::instance()->isKeyDown('w')) position = position + front * vstep;
-	if (KeyBuffer::instance()->isKeyDown('s')) position = position - front * vstep;
-	if (KeyBuffer::instance()->isKeyDown('z')) turretAngle += astep;
-	if (KeyBuffer::instance()->isKeyDown('x')) turretAngle -= astep;
+	if (playerNumber == 1) {
+		if (KeyBuffer::instance()->isKeyDown('a')) tankAngle += astep;
+		if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
+		if (KeyBuffer::instance()->isKeyDown('w')) position = position + front * vstep;
+		if (KeyBuffer::instance()->isKeyDown('s')) position = position - front * vstep;
+		if (KeyBuffer::instance()->isKeyDown('z')) turretAngle += astep;
+		if (KeyBuffer::instance()->isKeyDown('x')) turretAngle -= astep;
+	}
+	if (playerNumber == 2) {
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_LEFT)) tankAngle += astep;
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_RIGHT)) tankAngle -= astep;
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_UP)) position = position + front * vstep;
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_DOWN)) position = position - front * vstep;
+		if (KeyBuffer::instance()->isKeyDown('0')) turretAngle += astep;
+		if (KeyBuffer::instance()->isKeyDown('.')) turretAngle -= astep;
+	}
 
 	Quaternion qr(tankAngle, AXIS3D_Y);
 	Quaternion qi(AXIS3D_Z);

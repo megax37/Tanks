@@ -7,7 +7,7 @@
 class Tank : Object
 {
 public:
-	Tank(SceneNode* tankBase, SceneNode* frontLeftWheel, SceneNode* frontRightWheel, SceneNode* backLeftWheel, SceneNode* backRightWheel, SceneNode* tankTurret);
+	Tank(SceneNode* tankBase, SceneNode* frontLeftWheel, SceneNode* frontRightWheel, SceneNode* backLeftWheel, SceneNode* backRightWheel, SceneNode* tankTurret, int player);
 	~Tank();
 
 	void update(int elapsedTime);
@@ -21,6 +21,8 @@ public:
 private:
 
 	SceneNode* tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
+
+	int playerNumber = 1;
 
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;
