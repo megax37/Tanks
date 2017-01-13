@@ -18,45 +18,16 @@ void Mesh::create()
 	freeMeshData();
 	createBufferObject();
 }
-/** /
-int Mesh::getVaoId()
-{
-	return VaoId;
-}
-/**/
+
 void Mesh::draw(ShaderProgram * shader, Matrix4D transform)
 {
 	glBindVertexArray(VaoId);
 	GLint ModelMatrix_UId = shader->getUniform("ModelMatrix");
 	glUniformMatrix4fv(ModelMatrix_UId, 1, GL_FALSE, &(transform).toColumnMatrix()[0]);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Vertices.size());
-}
-/** /
-std::vector<Vertex> Mesh::vertices()
-{
-	return Vertices;
+	glBindVertexArray(0);
 }
 
-std::vector<Texcoord> Mesh::texcoords()
-{
-	return Texcoords;
-}
-
-std::vector<Normal> Mesh::normals()
-{
-	return Normals;
-}
-
-bool Mesh::isTexcoordsLoaded()
-{
-	return TexcoordsLoaded;
-}
-
-bool Mesh::isNormalsLoaded()
-{
-	return NormalsLoaded;
-}
-/**/
 // private functions
 
 // Parsing

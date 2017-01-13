@@ -57,16 +57,7 @@ public:
 	~Mesh();
 
 	void create();
-	//int getVaoId();
-
 	void draw(ShaderProgram* shader, Matrix4D transform);
-
-	/*std::vector<Vertex> vertices();
-	std::vector<Texcoord> texcoords();
-	std::vector<Normal> normals();
-
-	bool isTexcoordsLoaded();
-	bool isNormalsLoaded();*/
 };
 
 #endif

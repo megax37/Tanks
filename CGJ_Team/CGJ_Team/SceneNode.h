@@ -17,7 +17,6 @@ public:
 	//For independent scaling, if a scaling node propagation is desired, insert it into modelMatrix transform
 	void setScale(Matrix4D scale);
 
-	void setColor(Vector4D matColor);
 	void setShaderProgram(ShaderProgram* shader);
 
 	void setVisible(bool flag);
@@ -42,13 +41,9 @@ private:
 	Matrix4D modelMatrix;
 	Matrix4D scaleMatrix;
 
-	Vector4D color;
 	ShaderProgram* shaderProgram;
 
 	bool visible;
-
-	void removeChildNode(SceneNode * node);
-
 
 	//Matrix4D getFinalTransform();
 };

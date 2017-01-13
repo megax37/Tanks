@@ -1,6 +1,8 @@
 #ifndef _MATERIAL_
 #define _MATERIAL_
 
+class ShaderProgram;
+
 #include "engine.h"
 
 class Material
@@ -16,6 +18,8 @@ public:
 	Vector3D Ke();
 	float Ns();
 
+	void loadToShader(ShaderProgram* shader);
+
 private:
 	std::string materialName;
 
@@ -23,7 +27,6 @@ private:
 	Vector3D diffuseReflectivity;
 	Vector3D specularReflectivity;
 	Vector3D emissiveReflectivity;
-
 	float specularExponent;
 
 	void loadMaterialData(const std::string& filename);

@@ -4,14 +4,6 @@ Bullet::Bullet(SceneNode * bulletSceneNode)
 {
 	bullet = bulletSceneNode;
 	fired = false;
-
-	/*position = initialPosition;
-	frontVector.y += 0.2f;
-	velocity = frontVector;
-	angle = tankAngle;
-
-	timeToDestroy = 5000.0f;
-	destroy = false;*/
 }
 
 Bullet::~Bullet()

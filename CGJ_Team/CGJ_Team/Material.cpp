@@ -43,6 +43,18 @@ float Material::Ns()
 	return specularExponent;
 }
 
+void Material::loadToShader(ShaderProgram * shader)
+{
+	GLint Diffuse_UId = shader->getUniform("DiffuseReflectivity");
+	glUniform3f(Diffuse_UId, diffuseReflectivity.x, diffuseReflectivity.y, diffuseReflectivity.z);
+
+	GLint Specular_UId = shader->getUniform("SpecularReflectivity");
+	glUniform3f(Specular_UId, specularReflectivity.x, specularReflectivity.y, specularReflectivity.z);
+
+	GLint Exponent_UId = shader->getUniform("SpecularExponent");
+	glUniform1f(Exponent_UId, specularExponent);
+}
+
 // Parsing
 void Material::loadMaterialData(const std::string & filename)
 {

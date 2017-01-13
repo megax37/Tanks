@@ -86,7 +86,9 @@ void createMaterials()
 
 	material = new Material("Models/Bullet.mtl");
 	MaterialManager::instance()->add(material->MaterialName(), material);
-	//std::cout << material->MaterialName() << " Kd: " << material->Kd() << std::endl;
+
+	material = new Material("Models/Ground.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
 }
 
 /////////////////////////////////////////////////////////////////////// Meshes
@@ -155,13 +157,16 @@ void createShaderPrograms()
 	program->addAttribute("inTexcoord", TEXCOORDS);
 	program->addAttribute("inNormal", NORMALS);
 	program->create();
-	program->addUniform("Color");
 	program->addUniform("ModelMatrix");
+	program->addUniform("NormalMatrix");
+	program->addUniform("DiffuseReflectivity");
+	program->addUniform("SpecularReflectivity");
+	program->addUniform("SpecularExponent");
 	program->addUniform("Texmap");
 	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP);
 	program->addUniformBlock("DirectionalLight", UBO_BP1);
-	ShaderProgramManager::instance()->add("stack", program);
+	ShaderProgramManager::instance()->add("Basic", program);
 
 	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/tank_vs.glsl");
@@ -258,15 +263,17 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 {
 	Mesh* mesh;
 	Texture* tex;
+	Material* mat;
 	
 	// Ground
 	mesh = MeshManager::instance()->get("cube");
 	tex = TextureManager::instance()->get("desert");
+	mat = MaterialManager::instance()->get("Ground");
 
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
 	ground->setTexture(tex);
-	ground->setColor(Vector4D(0.7f, 0.5f, 0.3f, 1.0f));
+	ground->setMaterial(mat);
 	ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
 	ground->setScale(scale(15.0f, 0.1f, 15.0f));
 }
@@ -283,7 +290,7 @@ void createScene()
 	scenegraph->setLight(new DirectionalLight(Vector3D(1.0f, 0.6f, 0.25f), Vector3D(0.94f, 0.78f, 0.27f), UBO_BP1));
 
 	SceneNode* groundRoot = scenegraph->getRoot();
-	groundRoot->setShaderProgram(ShaderProgramManager::instance()->get("stack"));
+	groundRoot->setShaderProgram(ShaderProgramManager::instance()->get("Basic"));
 
 	createEnvironmentSceneGraph(scenegraph);
 	createTankSceneGraph(scenegraph);
@@ -361,12 +368,7 @@ void updateAnimation()
 }
 
 void update() {
-	/*float vstep = 0.002f * elapsedTime;
 
-	if (KeyBuffer::instance()->isKeyDown('w')) Position.z -= vstep;
-	if (KeyBuffer::instance()->isKeyDown('s')) Position.z += vstep;
-	if (KeyBuffer::instance()->isKeyDown('a')) Position.x -= vstep;
-	if (KeyBuffer::instance()->isKeyDown('d')) Position.x += vstep;*/
 	q = qFromAngleAxis(-RotationAngleY, AXIS3D_Y) * qFromAngleAxis(-RotationAngleX, AXIS3D_X) * q;
 	RotationAngleX = RotationAngleY = 0.0f;
 

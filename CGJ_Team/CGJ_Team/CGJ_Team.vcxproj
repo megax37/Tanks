@@ -167,6 +167,8 @@
   <ItemGroup>
     <None Include="Shaders\cube_fs.glsl" />
     <None Include="Shaders\cube_vs.glsl" />
+    <None Include="Shaders\explosion_fs.glsl" />
+    <None Include="Shaders\explosion_vs.glsl" />
     <None Include="Shaders\tank_fs.glsl" />
     <None Include="Shaders\tank_vs.glsl" />
   </ItemGroup>

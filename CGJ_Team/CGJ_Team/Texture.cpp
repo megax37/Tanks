@@ -39,6 +39,23 @@ GLuint Texture::getTextureID()
 	return id;
 }
 
+void Texture::loadToShader(ShaderProgram * shader)
+{
+	glActiveTexture(GL_TEXTURE0);
+	this->bind();
+	GLint TexMode_UId = shader->getUniform("TexMode");
+	glUniform1i(TexMode_UId, 1);
+	GLint Tex_UId = shader->getUniform("Texmap");
+	glUniform1i(Tex_UId, 0);
+}
+
+void Texture::unloadFromShader(ShaderProgram * shader)
+{
+	this->unbind();
+	GLint TexMode_UId = shader->getUniform("TexMode");
+	glUniform1i(TexMode_UId, 0);
+}
+
 void Texture::load(const std::string & filename)
 {
 	data = SOIL_load_image(filename.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);

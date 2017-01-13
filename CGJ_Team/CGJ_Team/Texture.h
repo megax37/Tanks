@@ -1,6 +1,8 @@
 #ifndef _TEXTURE_
 #define _TEXTURE_
 
+class ShaderProgram;
+
 #include "engine.h"
 
 class Texture
@@ -14,6 +16,9 @@ public:
 	void unbind();
 
 	GLuint getTextureID();
+
+	void loadToShader(ShaderProgram* shader);
+	void unloadFromShader(ShaderProgram* shader);
 
 private:
 

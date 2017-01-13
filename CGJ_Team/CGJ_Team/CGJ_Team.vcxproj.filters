@@ -166,5 +166,11 @@
     <None Include="Shaders\tank_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Shaders\explosion_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\explosion_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
