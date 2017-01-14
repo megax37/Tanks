@@ -445,6 +445,11 @@ void update() {
 	bulletManager->update(elapsedTime);
 	bulletManager2->update(elapsedTime);
 	//if (animating) updateAnimation();
+
+	if(tankObject->collides(tankObject2))
+{
+	std::cout << "Colidiu" << std::endl;
+}
 }
 
 /////////////////////////////////////////////////////////////////////// Callbacks

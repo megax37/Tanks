@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(SceneNode * bulletSceneNode)
+Bullet::Bullet(SceneNode * bulletSceneNode) : Collider(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f)
 {
 	bullet = bulletSceneNode;
 	fired = false;
@@ -16,10 +16,10 @@ void Bullet::update(int elapsedTime)
 	float gravity = 0.0002f * elapsedTime;
 	float vstep = 0.009f * elapsedTime;
 
-	position = position + velocity * vstep;
+	_position = _position + velocity * vstep;
 	velocity.y -= gravity;
 
-	if (position.y <= 0.0f) {
+	if (_position.y <= 0.0f) {
 		bullet->setVisible(false);
 		this->disable();
 	}
@@ -34,12 +34,7 @@ bool Bullet::isToDestroy()
 
 void Bullet::move()
 {
-	bullet->setMatrix(translation(position) * rotation(angle, AXIS3D_Y));
-}
-
-void Bullet::setPosition(Vector3D pos)
-{
-	position = pos;
+	bullet->setMatrix(translation(_position) * rotation(angle, AXIS3D_Y));
 }
 
 void Bullet::setVelocity(Vector3D vel)

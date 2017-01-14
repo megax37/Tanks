@@ -1,6 +1,7 @@
 #include "Tank.h"
 
-Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode * BLwheel, SceneNode * BRwheel, SceneNode * turret, int player)
+Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode * BLwheel, SceneNode * BRwheel, SceneNode * turret, int player) :
+	Collider(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f)
 {
 	tankBase = base;
 	frontLeftWheel = FLwheel;
@@ -12,9 +13,9 @@ Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode
 	playerNumber = player;
 
 	if (playerNumber == 1)
-		position = Vector3D(1.0f, 0.0f, 1.0f);
+		_position = Vector3D(1.0f, 0.0f, 1.0f);
 	if (playerNumber == 2)
-		position = Vector3D(-1.0f, 0.0f, -1.0f);
+		_position = Vector3D(-1.0f, 0.0f, -1.0f);
 }
 
 Tank::~Tank()
@@ -29,16 +30,16 @@ void Tank::update(int elapsedTime)
 	if (playerNumber == 1) {
 		if (KeyBuffer::instance()->isKeyDown('a')) tankAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
-		if (KeyBuffer::instance()->isKeyDown('w')) position = position + front * vstep;
-		if (KeyBuffer::instance()->isKeyDown('s')) position = position - front * vstep;
+		if (KeyBuffer::instance()->isKeyDown('w')) _position = _position + front * vstep;
+		if (KeyBuffer::instance()->isKeyDown('s')) _position = _position - front * vstep;
 		if (KeyBuffer::instance()->isKeyDown('z')) turretAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('x')) turretAngle -= astep;
 	}
 	if (playerNumber == 2) {
 		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_LEFT)) tankAngle += astep;
 		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_RIGHT)) tankAngle -= astep;
-		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_UP)) position = position + front * vstep;
-		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_DOWN)) position = position - front * vstep;
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_UP))  _position = _position + front * vstep;
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_DOWN)) _position = _position - front * vstep;
 		if (KeyBuffer::instance()->isKeyDown('0')) turretAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('.')) turretAngle -= astep;
 	}
@@ -55,13 +56,10 @@ void Tank::update(int elapsedTime)
 
 void Tank::move()
 {
-	tankBase->setMatrix(translation(position) * rotation(tankAngle, AXIS3D_Y));
+	tankBase->setMatrix(translation(_position) * rotation(tankAngle, AXIS3D_Y));
 	tankTurret->setMatrix(rotation(turretAngle, AXIS3D_Y));
 }
 
-Vector3D Tank::getPosition() {
-	return position;
-}
 Vector3D Tank::getFront() {
 	return front;
 }

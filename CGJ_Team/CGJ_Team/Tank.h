@@ -2,9 +2,9 @@
 #define _TANK_
 
 #include "SceneNode.h"
-#include "Object.h"
+#include "Collider.h"
 
-class Tank : Object
+class Tank : public Collider
 {
 public:
 	Tank(SceneNode* tankBase, SceneNode* frontLeftWheel, SceneNode* frontRightWheel, SceneNode* backLeftWheel, SceneNode* backRightWheel, SceneNode* tankTurret, int player);
@@ -12,7 +12,7 @@ public:
 
 	void update(int elapsedTime);
 	void move();
-	Vector3D getPosition();
+
 	Vector3D getFront();
 	Vector3D getTurretFront();
 	float getAngle();
@@ -27,7 +27,7 @@ private:
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;
 
-	Vector3D position, front, turretFront;
+	Vector3D front, turretFront;
 
 	float tankAngle = 0.0f;
 	float turretAngle = 0.0f;

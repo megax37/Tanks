@@ -3,9 +3,9 @@
 #define _BULLET_
 
 #include "SceneNode.h"
-#include "Object.h"
+#include "Collider.h"
 
-class Bullet : Object
+class Bullet : public Collider
 {
 public:
 	Bullet(SceneNode * bulletSceneNode);
@@ -15,7 +15,6 @@ public:
 	bool isToDestroy();
 	void move();
 
-	void setPosition(Vector3D pos);
 	void setVelocity(Vector3D vel);
 	void setAngle(float theta);
 
@@ -30,7 +29,7 @@ private:
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;
 
-	Vector3D position, velocity;
+	Vector3D velocity;
 	float angle = 0; 
 	
 	bool fired;
