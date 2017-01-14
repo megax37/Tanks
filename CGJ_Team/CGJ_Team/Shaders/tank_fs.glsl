@@ -14,9 +14,9 @@ uniform vec3 SpecularReflectivity;
 uniform float SpecularExponent;
 
 vec3 topHemisphere = vec3(0.0, 1.0, 0.0);
-vec3 skyColor = vec3(0.6f, 0.8f, 0.9f);
-//vec3 groundColor = vec3(0.761f, 0.698f, 0.502f);
-vec3 groundColor = vec3(1.0f, 0.843f, 0.0f);
+vec3 skyColor = vec3(0.6, 0.8, 0.9);
+//vec3 groundColor = vec3(0.761, 0.698, 0.502);
+vec3 groundColor = vec3(1.0, 0.843, 0.0);
 const float PI = 3.141592653589793238462643383;
 
 uniform sampler2D Texmap;
@@ -49,7 +49,7 @@ void main(void)
 
 		/* GAUSSIAN DISTRIBUTION SPECULAR */
 		float alpha = acos(dot(H, N));
-		float m = smoothstep(1, 1000.0, SpecularExponent * 6);
+		float m = smoothstep(0.0, 1000.0, SpecularExponent * 6);
 		color = color + mix(SpecularReflectivity, LightColor, 0.2) * exp(-pow(alpha / m, 2.0));
 	}
 

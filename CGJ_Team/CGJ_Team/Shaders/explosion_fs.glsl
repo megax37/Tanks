@@ -8,44 +8,31 @@ in vec2 exTexcoord;
 
 out vec4 FragmentColor;
 
-uniform vec4 Color;
 uniform sampler2D Texmap;
-uniform int TexMode;
+uniform float life;
 
-uniform DirectionalLight {
-	vec3 LightDirection;
-	vec3 LightColor;
-};
+vec4 HotColor = vec3(1.0, 0.1, 0.0, 1.0);
+vec4 MidColor = vec3(0.5, 0.1, 0.0, 1.0);
+vec4 ColdColor = vec3(0.1, 0.0, 0.0, 1.0);
 
 void main(void)
 {
-	vec3 color;
+	vec4 color;
+	vec4 texel;
 
-	vec3 N = normalize(exNormal);
-	vec3 L = normalize(exLightDir);
-	vec3 E = normalize(exEye);
-
-	if(TexMode == 1) {
-		color = vec3(texture(Texmap, exTexcoord));
-	} else {
-		color = vec3(Color);
+	texel = texture(Texmap, exTexcoord);
+	if(texel.a < 0.1) {
+		discard;
 	}
+	else {
+		if(life >= 0.5) {
+			color = mix(MidColor, HotColor, ((life - 0.5) / 0.5));
+		} else {
+			color = mix(ColdColor, MidColor, (life / 0.5));
+		}
 
-	float intensity = max(dot(L, N), 0.05);
-	//color = mix(color * intensity, LightColor, 0.15);
-	color = color * (intensity + 0.1) + LightColor * 0.1;
+		color.a = life;
 
-	if(intensity > 0.0) {
-		vec3 H = normalize(L + E);
-
-		/* BLINN-PHONG SPECULAR */
-		//color = color + LightColor * pow(max(dot(H, N), 0.0), 15 * 4);
-
-		/* GAUSSIAN DISTRIBUTION SPECULAR */
-		float alpha = acos(dot(H, N));
-		//float m = smoothstep(1, 1000.0, SpecularExponent * 6);
-		color = color + LightColor * exp(-pow(alpha / 0.15, 2.0)) * 0.75;
+		FragmentColor = color * texel;
 	}
-
-	FragmentColor = vec4(color,1.0);
 }
