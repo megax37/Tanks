@@ -14,6 +14,7 @@
 #include "TextureManager.h"
 #include "ShaderProgramManager.h"
 #include "SceneGraphManager.h"
+#include "main.h"
 //using namespace engine;
 
 #define ASSERT_GL_ERROR(string) checkOpenGLError(string)
@@ -441,15 +442,23 @@ void update() {
 	if (KeyBuffer::instance()->isKeyDown('2')) bulletManager2->shoot(tankObject2->getPosition(), tankObject2->getTurretFront(), tankObject2->getAngle());
 
 	tankObject->update(elapsedTime);
+	if (tankObject->collides(tankObject2))
+	{
+		tankObject->hitTank();
+	}
 	tankObject2->update(elapsedTime);
+	if (tankObject2->collides(tankObject))
+	{
+		tankObject2->hitTank();
+	}
 	bulletManager->update(elapsedTime);
+	bulletManager->checkCollisions(tankObject2);
+
 	bulletManager2->update(elapsedTime);
+	bulletManager2->checkCollisions(tankObject);
 	//if (animating) updateAnimation();
 
-	if(tankObject->collides(tankObject2))
-{
-	std::cout << "Colidiu" << std::endl;
-}
+
 }
 
 /////////////////////////////////////////////////////////////////////// Callbacks

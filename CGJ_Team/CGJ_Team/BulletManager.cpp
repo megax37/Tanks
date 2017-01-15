@@ -59,3 +59,13 @@ void BulletManager::move() {
 		if (bullet->isFired()) bullet->move();
 	}
 }
+
+void BulletManager::checkCollisions(Tank * tank) {
+	for each(Bullet * b in bullets) {
+		if (b->collides(tank)) {
+			b->explode();
+			b->disable();
+			tank->hitBullet();
+		}
+	}
+}

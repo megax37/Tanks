@@ -12,6 +12,8 @@ public:
 
 	void update(int elapsedTime);
 	void move();
+	void hitTank();
+	void hitBullet();
 
 	Vector3D getFront();
 	Vector3D getTurretFront();

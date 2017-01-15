@@ -21,6 +21,7 @@ public:
 	void enable();
 	void disable();
 	bool isFired();
+	void explode();
 
 private:
 

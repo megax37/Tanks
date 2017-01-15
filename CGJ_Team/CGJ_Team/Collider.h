@@ -8,6 +8,7 @@ class Collider : public Object
 {
 protected:
 	Vector3D _position;
+	Vector3D _lastposition;
 private:
 	float _minX, _maxX, _minY, _maxY, _minZ, _maxZ;
 	
