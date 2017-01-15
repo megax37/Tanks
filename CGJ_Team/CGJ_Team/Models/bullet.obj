@@ -1,5 +1,6 @@
 # Blender v2.76 (sub 0) OBJ File: ''
 # www.blender.org
+mtllib bullet.mtl
 o Shell_Untitled
 v 0.066139 0.130033 0.066922
 v 0.028258 0.221485 0.066922

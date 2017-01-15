@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(SceneNode * bulletSceneNode) : Collider(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f)
+Bullet::Bullet(SceneNode * bulletSceneNode) : Collider(-0.1f, 0.1f, 0.0f, 0.28f, 0.0f, 0.52f)
 {
 	bullet = bulletSceneNode;
 	fired = false;
@@ -63,5 +63,8 @@ bool Bullet::isFired()
 	return fired;
 }
 
+void Bullet::explode() {
+	std::cout << "Explode" << std::endl;
+}
 
 
