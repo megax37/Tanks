@@ -9,7 +9,7 @@ in vec2 exTexcoord;
 out vec4 FragmentColor;
 
 uniform sampler2D Texmap;
-uniform float life;
+uniform float Life;
 
 vec4 HotColor = vec3(1.0, 0.1, 0.0, 1.0);
 vec4 MidColor = vec3(0.5, 0.1, 0.0, 1.0);

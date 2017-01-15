@@ -45,7 +45,7 @@ void main(void)
 
 		/* GAUSSIAN DISTRIBUTION SPECULAR */
 		float alpha = acos(dot(H, N));
-		float m = smoothstep(1, 1000.0, SpecularExponent * 6);
+		float m = smoothstep(0.0, 1000.0, SpecularExponent * 6);
 		color = color + mix(SpecularReflectivity, LightColor, 0.5) * exp(-pow(alpha / m, 2.0));
 	}
 

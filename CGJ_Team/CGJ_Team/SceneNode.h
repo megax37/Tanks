@@ -30,7 +30,7 @@ public:
 
 	void destroy();
 
-private:
+protected:
 	SceneNode* parentNode;
 	std::vector<SceneNode*> childrenNodes;
 
