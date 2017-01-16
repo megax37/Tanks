@@ -11,6 +11,7 @@ Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode
 	tankTurret = turret;
 
 	playerNumber = player;
+	life = 3;
 
 	if (playerNumber == 1)
 		_position = Vector3D(0.0f, 0.0f, -5.0f);
@@ -73,6 +74,10 @@ Vector3D Tank::getTurretFront() {
 
 float Tank::getAngle() {
 	return turretAngle + tankAngle;
+}
+
+int Tank::getLife() {
+	return life;
 }
 
 void Tank::hitTank() {

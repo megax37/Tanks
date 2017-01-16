@@ -123,6 +123,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="KeyBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="engine.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="KeyBuffer.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Material.h" />

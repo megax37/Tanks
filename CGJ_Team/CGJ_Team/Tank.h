@@ -18,6 +18,7 @@ public:
 	Vector3D getFront();
 	Vector3D getTurretFront();
 	float getAngle();
+	int getLife();
 
 	
 private:
@@ -25,6 +26,7 @@ private:
 	SceneNode* tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
 
 	int playerNumber = 1;
+	int life = 3;
 
 	float vspeed = 0.0025f;
 	float aspeed = 0.05f;

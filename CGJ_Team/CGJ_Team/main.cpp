@@ -7,6 +7,7 @@
 #include "engine.h"
 #include "Tank.h"
 #include "BulletManager.h"
+#include "HUD.h"
 #include "Explosion.h"
 #include "SceneGraph.h"
 // Managersdddo
@@ -24,7 +25,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-GLuint UBO_BP = 0, UBO_BP1 = 1;
+GLuint UBO_BP = 0, UBO_BP1 = 1, UBO_BP2 = 2;
 
 const float DistanceStep = 1.5f;
 float Distance = 25.0f;
@@ -55,6 +56,8 @@ Tank* tankObject;
 Tank* tankObject2;
 BulletManager * bulletManager;
 BulletManager * bulletManager2;
+HUD* p1HUD;
+HUD* p2HUD;
 Explosion * explosion;
 
 /////////////////////////////////////////////////////////////////////// Textures
@@ -74,6 +77,12 @@ void createTextures()
 	
 	texture = new Texture("Textures/particle.tga");
 	TextureManager::instance()->add("particle", texture);
+
+	texture = new Texture("Textures/greenMetal.tga");
+	TextureManager::instance()->add("greenMetal", texture);
+
+	texture = new Texture("Textures/redMetal.tga");
+	TextureManager::instance()->add("redMetal", texture);
 }
 
 /////////////////////////////////////////////////////////////////////// Materials
@@ -82,6 +91,9 @@ void createMaterials()
 {
 	Material* material;
 	material = new Material("Models/Tank/TankColour.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Tank/TankColour2.mtl");
 	MaterialManager::instance()->add(material->MaterialName(), material);
 
 	material = new Material("Models/Tank/TankGrey.mtl");
@@ -197,6 +209,18 @@ void createShaderPrograms()
 	ShaderProgramManager::instance()->add("tank", program);
 
 	program = new ShaderProgram();
+	program->addShader(GL_VERTEX_SHADER, "Shaders/hud_vs.glsl");
+	program->addShader(GL_FRAGMENT_SHADER, "Shaders/hud_fs.glsl");
+	program->addAttribute("inPosition", VERTICES);
+	program->addAttribute("inTexcoord", TEXCOORDS);
+	program->create();
+	program->addUniform("ModelMatrix");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
+	program->addUniformBlock("Camera", UBO_BP2);
+	ShaderProgramManager::instance()->add("HUD", program);
+
+	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/explosion_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/explosion_fs.glsl");
 	program->addAttribute("inPosition", VERTICES);
@@ -284,7 +308,7 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	// Tank 2
 	// Main Color material
 	mesh = MeshManager::instance()->get("TankChassis");
-	mat = MaterialManager::instance()->get("TankColour");
+	mat = MaterialManager::instance()->get("TankColour2");
 	tankBase2 = scenegraph->createNode();
 	tankBase2->setMesh(mesh);
 	tankBase2->setMaterial(mat);
@@ -362,6 +386,59 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	ground->setScale(scale(15.0f, 0.1f, 15.0f));
 }
 
+SceneNode *p1_HUDBar_1, *p1_HUDBar_2, *p1_HUDBar_3, *p2_HUDBar_1, *p2_HUDBar_2, *p2_HUDBar_3;
+
+void createHUDSceneGraph(SceneGraph* scenegraph)
+{
+	Mesh* mesh;
+	Texture* tex;
+
+	mesh = MeshManager::instance()->get("cube");
+	tex = TextureManager::instance()->get("greenMetal");
+
+	p1_HUDBar_1 = scenegraph->createNode();
+	p1_HUDBar_1->setMesh(mesh);
+	p1_HUDBar_1->setTexture(tex);
+	p1_HUDBar_1->setMatrix(translation(30.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
+
+	p1_HUDBar_2 = scenegraph->createNode();
+	p1_HUDBar_2->setMesh(mesh);
+	p1_HUDBar_2->setTexture(tex);
+	p1_HUDBar_2->setMatrix(translation(90.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
+
+	p1_HUDBar_3 = scenegraph->createNode();
+	p1_HUDBar_3->setMesh(mesh);
+	p1_HUDBar_3->setTexture(tex);
+	p1_HUDBar_3->setMatrix(translation(150.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
+
+
+	tex = TextureManager::instance()->get("redMetal");
+
+	p2_HUDBar_1 = scenegraph->createNode();
+	p2_HUDBar_1->setMesh(mesh);
+	p2_HUDBar_1->setTexture(tex);
+	p2_HUDBar_1->setMatrix(translation(610.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
+
+	p2_HUDBar_2 = scenegraph->createNode();
+	p2_HUDBar_2->setMesh(mesh);
+	p2_HUDBar_2->setTexture(tex);
+	p2_HUDBar_2->setMatrix(translation(550.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
+
+	p2_HUDBar_3 = scenegraph->createNode();
+	p2_HUDBar_3->setMesh(mesh);
+	p2_HUDBar_3->setTexture(tex);
+	p2_HUDBar_3->setMatrix(translation(490.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
+
+	p1HUD = new HUD(p1_HUDBar_1, p1_HUDBar_2, p1_HUDBar_3, tankObject);
+	p2HUD = new HUD(p2_HUDBar_1, p2_HUDBar_2, p2_HUDBar_3, tankObject2);
+}
+
 ParticleSceneNode* explosionNode;
 
 void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
@@ -405,6 +482,21 @@ void createScene()
 	bulletManager = new BulletManager(groundRoot, 5);
 	bulletManager2 = new BulletManager(groundRoot, 5);
 	SceneGraphManager::instance()->add("main", scenegraph);
+
+
+	SceneGraph* HUDScenegraph = new SceneGraph();
+	HUDScenegraph->setCamera(new Camera(UBO_BP2));
+
+	int vp[4];
+	glGetIntegerv(GL_VIEWPORT, vp);
+	HUDScenegraph->getCamera()->setProjectionMatrix(orthographicMatrix(0.0f, vp[2], vp[3], 0.0f, -100.0f, 100.0f));
+	HUDScenegraph->getCamera()->setViewMatrix(identity());
+
+	SceneNode* HUDRoot = HUDScenegraph->getRoot();
+	HUDRoot->setShaderProgram(ShaderProgramManager::instance()->get("HUD"));
+
+	createHUDSceneGraph(HUDScenegraph);
+	SceneGraphManager::instance()->add("HUD", HUDScenegraph);
 }
 
 void setViewProjectionMatrix()
@@ -433,6 +525,10 @@ void drawSceneGraph()
 	bulletManager2->move();
 	explosion->move();
 	SceneGraphManager::instance()->get("main")->draw();
+
+	p1HUD->update();
+	p2HUD->update();
+	SceneGraphManager::instance()->get("HUD")->draw();
 }
 
 /////////////////////////////////////////////////////////////////////// Scene
