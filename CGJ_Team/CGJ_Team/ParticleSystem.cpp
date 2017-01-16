@@ -76,3 +76,8 @@ void ParticleSystem::move()
 		particleSceneNode->setParticlesLifes(particlesLifes);
 	}
 }
+
+bool ParticleSystem::isAlive()
+{
+	return alive;
+}

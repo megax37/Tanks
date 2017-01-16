@@ -133,6 +133,7 @@
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="ParticleSceneNode.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="SceneGraph.cpp" />
     <ClCompile Include="SceneGraphManager.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ParticleSceneNode.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneGraph.h" />
     <ClInclude Include="SceneGraphManager.h" />

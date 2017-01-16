@@ -16,6 +16,7 @@
 #include "TextureManager.h"
 #include "ShaderProgramManager.h"
 #include "SceneGraphManager.h"
+#include "ParticleSystemManager.h"
 //using namespace engine;
 
 #define ASSERT_GL_ERROR(string) checkOpenGLError(string)
@@ -29,7 +30,6 @@ GLuint UBO_BP = 0, UBO_BP1 = 1, UBO_BP2 = 2;
 
 const float DistanceStep = 1.5f;
 float Distance = 25.0f;
-Vector3D Position(0.0f, 0.0f, 0.0f);
 
 int LastMousePositionX, LastMousePositionY;
 float RotationAngleY = 45.0f;
@@ -439,15 +439,24 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p2HUD = new HUD(p2_HUDBar_1, p2_HUDBar_2, p2_HUDBar_3, tankObject2);
 }
 
-ParticleSceneNode* explosionNode;
-
 void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
 {
 	Mesh* mesh = MeshManager::instance()->get("quad");
 	Texture* tex = TextureManager::instance()->get("particle");
 	ShaderProgram* shader = ShaderProgramManager::instance()->get("explosion");
 
-	int particleCount = 100;
+	int particleCount = 200;
+
+	ParticleSceneNode* explosionNode = new ParticleSceneNode(particleCount);
+	explosionNode->setMesh(mesh);
+	explosionNode->setTexture(tex);
+	explosionNode->setShaderProgram(shader);
+	explosionNode->setScale(scale(0.5f, 0.5f, 0.5f));
+	explosionNode->setVisible(false);
+
+	scenegraph->getRoot()->addNode(explosionNode);
+	explosion = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion);
 
 	explosionNode = new ParticleSceneNode(particleCount);
 	explosionNode->setMesh(mesh);
@@ -457,8 +466,8 @@ void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
 	explosionNode->setVisible(false);
 
 	scenegraph->getRoot()->addNode(explosionNode);
-
 	explosion = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion);
 }
 
 void createScene()
@@ -540,39 +549,6 @@ void drawScene()
 }
 
 /////////////////////////////////////////////////////////////////////// Simulation
-void updateAnimation()
-{
-	float vstep = 0.001f * elapsedTime;
-
-	t += animationDirection * vstep;
-
-	if (t > 1.0f) {
-		t = 1.0f;
-		animationDirection = -1;
-		animating = false;
-	}
-	else if(t < 0.0f) {
-		t = 0.0f;
-		animationDirection = 1;
-		animating = false;
-	}
-
-	/*currentPosTriangleR = vLerp(initialPosTriangleR, finalPosTriangleR, t);
-	currentPosTriangleG = vLerp(initialPosTriangleG, finalPosTriangleG, t);
-	currentPosTriangleB = vLerp(initialPosTriangleB, finalPosTriangleB, t);
-	currentPosTriangleO = vLerp(initialPosTriangleO, finalPosTriangleO, t);
-	currentPosTriangleP = vLerp(initialPosTriangleP, finalPosTriangleP, t);
-	currentPosCube = vLerp(initialPosCube, finalPosCube, t);
-	currentPosParallelogram = vLerp(initialPosParallelogram, finalPosParallelogram, t);
-
-	currentRotTriangleR = qSlerp(initialRotTriangleR, finalRotTriangleR, t);
-	currentRotTriangleG = qSlerp(initialRotTriangleG, finalRotTriangleG, t);
-	currentRotTriangleB = qSlerp(initialRotTriangleB, finalRotTriangleB, t);
-	currentRotTriangleO = qSlerp(initialRotTriangleO, finalRotTriangleO, t);
-	currentRotTriangleP = qSlerp(initialRotTriangleP, finalRotTriangleP, t);
-	currentRotCube = qSlerp(initialRotCube, finalRotCube, t);
-	currentRotParallelogram = qSlerp(initialRotParallelogram, finalRotParallelogram, t);*/
-}
 
 void update() {
 
@@ -599,9 +575,6 @@ void update() {
 	bulletManager2->checkCollisions(tankObject);
 
 	explosion->update(elapsedTime);
-	//if (animating) updateAnimation();
-
-
 }
 
 /////////////////////////////////////////////////////////////////////// Callbacks

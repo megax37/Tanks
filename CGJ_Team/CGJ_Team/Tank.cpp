@@ -85,5 +85,5 @@ void Tank::hitTank() {
 }
 
 void Tank::hitBullet() {
-	std::cout << "drop life " + playerNumber << std::endl;
+	life--;
 }

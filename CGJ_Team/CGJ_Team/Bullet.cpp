@@ -8,28 +8,17 @@ Bullet::Bullet(SceneNode * bulletSceneNode) : Collider(-0.1f, 0.1f, 0.0f, 0.28f,
 
 Bullet::~Bullet()
 {
-	//delete bullet;
 }
 
 void Bullet::update(int elapsedTime)
 {
-	float gravity = 0.0002f * elapsedTime;
-	float vstep = 0.009f * elapsedTime;
+	float gravity = gspeed * elapsedTime;
+	float vstep = vspeed * elapsedTime;
 
 	_position = _position + velocity * vstep;
 	velocity.y -= gravity;
 
-	if (_position.y <= 0.0f) {
-		bullet->setVisible(false);
-		this->disable();
-	}
-
-	//timeToDestroy -= elapsedTime;
-}
-
-bool Bullet::isToDestroy()
-{
-	return timeToDestroy < 0.0f;
+	if (_position.y <= 0.0f) this->explode();
 }
 
 void Bullet::move()
@@ -64,7 +53,9 @@ bool Bullet::isFired()
 }
 
 void Bullet::explode() {
-	std::cout << "Explode" << std::endl;
+	bullet->setVisible(false);
+	this->disable();
+	ParticleSystem* p = ParticleSystemManager::instance()->get("Explosion");
+	if (p != nullptr) p->initParticles(_position);
+	else std::cout << "Nao explodiu, demasiadas explosoes..." << std::endl;
 }
-
-

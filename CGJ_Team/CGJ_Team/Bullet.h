@@ -4,6 +4,7 @@
 
 #include "SceneNode.h"
 #include "Collider.h"
+#include "ParticleSystemManager.h"
 
 class Bullet : public Collider
 {
@@ -12,7 +13,6 @@ public:
 	~Bullet();
 
 	void update(int elapsedTime);
-	bool isToDestroy();
 	void move();
 
 	void setVelocity(Vector3D vel);
@@ -27,20 +27,15 @@ private:
 
 	SceneNode* bullet;
 
-	float vspeed = 0.0025f;
-	float aspeed = 0.05f;
+	float vspeed = 0.009f;
+	float gspeed = 0.0002f;
 
 	Vector3D velocity;
 	float angle = 0; 
 	
 	bool fired;
 
-	float timeToDestroy;
-	bool destroy;
-
-	Vector3D AXIS3D_X = Vector3D(1.0f, 0.0f, 0.0f);
 	Vector3D AXIS3D_Y = Vector3D(0.0f, 1.0f, 0.0f);
-	Vector3D AXIS3D_Z = Vector3D(0.0f, 0.0f, 1.0f);
 };
 
 #endif
