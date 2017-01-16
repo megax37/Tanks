@@ -20,8 +20,10 @@ void ParticleSceneNode::draw(Matrix4D parentTransform)
 			GLint Life_UId = shaderProgram->getUniform("Life");
 			for (int i = 0; i < numParticles; i++)
 			{
-				glUniform1f(Life_UId, particlesLifes[i]);
-				meshObj->draw(shaderProgram, particlesTransforms[i]); // Draw Mesh
+				if (particlesLifes[i] > 0.0f) {
+					glUniform1f(Life_UId, particlesLifes[i]);
+					meshObj->draw(shaderProgram, particlesTransforms[i] * scaleMatrix); // Draw Mesh
+				}
 			}
 
 			texture->unloadFromShader(shaderProgram); // Unload Texture

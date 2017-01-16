@@ -7,6 +7,7 @@
 #include "engine.h"
 #include "Tank.h"
 #include "BulletManager.h"
+#include "Explosion.h"
 #include "SceneGraph.h"
 // Managersdddo
 #include "MeshManager.h"
@@ -14,7 +15,6 @@
 #include "TextureManager.h"
 #include "ShaderProgramManager.h"
 #include "SceneGraphManager.h"
-#include "main.h"
 //using namespace engine;
 
 #define ASSERT_GL_ERROR(string) checkOpenGLError(string)
@@ -55,6 +55,7 @@ Tank* tankObject;
 Tank* tankObject2;
 BulletManager * bulletManager;
 BulletManager * bulletManager2;
+Explosion * explosion;
 
 /////////////////////////////////////////////////////////////////////// Textures
 
@@ -71,6 +72,8 @@ void createTextures()
 	texture = new Texture("Textures/desert.jpg");
 	TextureManager::instance()->add("desert", texture);
 	
+	texture = new Texture("Textures/particle.tga");
+	TextureManager::instance()->add("particle", texture);
 }
 
 /////////////////////////////////////////////////////////////////////// Materials
@@ -146,6 +149,10 @@ void createMeshes()
 	mesh = new Mesh("Models/Bullet.obj");
 	mesh->create();
 	MeshManager::instance()->add("Bullet", mesh);
+
+	mesh = new Mesh("Models/quad.obj");
+	mesh->create();
+	MeshManager::instance()->add("quad", mesh);
 }
 
 /////////////////////////////////////////////////////////////////////// Shaders
@@ -188,6 +195,20 @@ void createShaderPrograms()
 	program->addUniformBlock("Camera", UBO_BP);
 	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("tank", program);
+
+	program = new ShaderProgram();
+	program->addShader(GL_VERTEX_SHADER, "Shaders/explosion_vs.glsl");
+	program->addShader(GL_FRAGMENT_SHADER, "Shaders/explosion_fs.glsl");
+	program->addAttribute("inPosition", VERTICES);
+	program->addAttribute("inTexcoord", TEXCOORDS);
+	program->addAttribute("inNormal", NORMALS);
+	program->create();
+	program->addUniform("ModelMatrix");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
+	program->addUniform("Life");
+	program->addUniformBlock("Camera", UBO_BP);
+	ShaderProgramManager::instance()->add("explosion", program);
 }
 
 /////////////////////////////////////////////////////////////////////// SceneGraph
@@ -341,6 +362,28 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	ground->setScale(scale(15.0f, 0.1f, 15.0f));
 }
 
+ParticleSceneNode* explosionNode;
+
+void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
+{
+	Mesh* mesh = MeshManager::instance()->get("quad");
+	Texture* tex = TextureManager::instance()->get("particle");
+	ShaderProgram* shader = ShaderProgramManager::instance()->get("explosion");
+
+	int particleCount = 100;
+
+	explosionNode = new ParticleSceneNode(particleCount);
+	explosionNode->setMesh(mesh);
+	explosionNode->setTexture(tex);
+	explosionNode->setShaderProgram(shader);
+	explosionNode->setScale(scale(0.5f, 0.5f, 0.5f));
+	explosionNode->setVisible(false);
+
+	scenegraph->getRoot()->addNode(explosionNode);
+
+	explosion = new Explosion(explosionNode, particleCount);
+}
+
 void createScene()
 {
 	SceneGraph* scenegraph = new SceneGraph();
@@ -357,6 +400,7 @@ void createScene()
 
 	createEnvironmentSceneGraph(scenegraph);
 	createTankSceneGraph(scenegraph);
+	createParticlesEffectsSceneGraph(scenegraph);
 
 	bulletManager = new BulletManager(groundRoot, 5);
 	bulletManager2 = new BulletManager(groundRoot, 5);
@@ -387,6 +431,7 @@ void drawSceneGraph()
 	tankObject2->move();
 	bulletManager->move();
 	bulletManager2->move();
+	explosion->move();
 	SceneGraphManager::instance()->get("main")->draw();
 }
 
@@ -456,6 +501,8 @@ void update() {
 
 	bulletManager2->update(elapsedTime);
 	bulletManager2->checkCollisions(tankObject);
+
+	explosion->update(elapsedTime);
 	//if (animating) updateAnimation();
 
 
@@ -510,6 +557,9 @@ void keyboard_down(unsigned char key, int x, int y)
 	case 'c':
 		printf("Camera Spherical Coordinates (%f, %f, %f)\n", pitch, yaw, Distance);
 		qPrint("Quaternion", q);
+		break;
+	case 'e':
+		explosion->initParticles(Vector3D(0.0f, 4.0f, 0.0f));
 		break;
 	}
 }

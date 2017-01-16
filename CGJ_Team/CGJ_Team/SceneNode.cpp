@@ -66,6 +66,12 @@ SceneNode * SceneNode::createNode()
 	return child;
 }
 
+void SceneNode::addNode(SceneNode * child)
+{
+	child->setParent(this);
+	childrenNodes.push_back(child);
+}
+
 void SceneNode::applyLTransform(Matrix4D transform)
 {
 	modelMatrix = transform * modelMatrix;
@@ -100,7 +106,7 @@ void SceneNode::draw(Matrix4D parentTransform)
 		}
 	}
 
-	for (auto it = childrenNodes.begin(); it < childrenNodes.end(); ++it)
+	for (auto it = childrenNodes.begin(); it != childrenNodes.end(); ++it)
 	{
 		(*it)->draw(finalMatrix);
 	}

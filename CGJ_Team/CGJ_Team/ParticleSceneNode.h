@@ -10,7 +10,7 @@ public:
 	ParticleSceneNode(int particleCount);
 	~ParticleSceneNode();
 
-	void draw(Matrix4D parentTransform);
+	virtual void draw(Matrix4D parentTransform) override;
 
 	void setParticlesTransforms(std::vector<Matrix4D> transforms);
 	void setParticlesLifes(std::vector<float> lifes);

@@ -4,6 +4,8 @@
 #include "Object.h"
 #include "ParticleSceneNode.h"
 
+#define frand()	((float)rand()/RAND_MAX)
+
 typedef struct {
 	float life;		  // lifespan
 	float fade;		  // fade
@@ -19,13 +21,14 @@ public:
 	ParticleSystem(ParticleSceneNode * particleNode, int particleCount);
 	~ParticleSystem();
 
-	virtual void initParticles() = 0;
+	virtual void initParticles(Vector3D startPos) = 0;
 
 	void update(int elapsedTime);
 	void move();
 
 protected:
 
+	bool alive;
 	int numParticles;
 	std::vector<Particle> particles;
 	ParticleSceneNode* particleSceneNode;

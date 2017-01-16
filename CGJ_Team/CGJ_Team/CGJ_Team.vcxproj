@@ -122,6 +122,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="KeyBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="ErrorHandler.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="KeyBuffer.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Material.h" />

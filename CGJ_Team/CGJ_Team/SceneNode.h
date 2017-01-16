@@ -23,10 +23,11 @@ public:
 	bool isVisible();
 
 	SceneNode* createNode();
+	void addNode(SceneNode* child);
 	void applyLTransform(Matrix4D transform);
 	void applyRTransform(Matrix4D transform);
 
-	void draw(Matrix4D parentTransform);
+	virtual void draw(Matrix4D parentTransform);
 
 	void destroy();
 
