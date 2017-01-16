@@ -15,22 +15,23 @@ void Explosion::initParticles(Vector3D startPos)
 
 	for (i = 0; i < numParticles; i++)
 	{
-		v = 0.03f * frand() + 0.01f;
+		v = 0.03f * frand() + 0.001f;
 		phi = frand() * (float)PI;
 		theta = 2.0f * frand() * (float)PI;
 
 		particles[i].x = startPos.x;
 		particles[i].y = startPos.y;
 		particles[i].z = startPos.z;
-		particles[i].vx = v * cos(theta) * sin(phi);
-		particles[i].vy = v * cos(phi);
+		//particles[i].vx = v * cos(theta) * sin(phi);
+		particles[i].vx = v * cos(phi);
+		particles[i].vy = v * sin(phi) * 2;
 		particles[i].vz = v * sin(theta) * sin(phi);
 		particles[i].ax = 0.0f; /* simular um pouco de vento */
-		particles[i].ay = -0.001f; /* simular a aceleração da gravidade */
+		particles[i].ay = -0.0008f; /* simular a aceleração da gravidade */
 		particles[i].az = 0.0f;
 
 		particles[i].life = 1.0f;		/* vida inicial */
-		particles[i].fade = 0.02f;	    /* step de decréscimo da vida para cada iteração */
+		particles[i].fade = 0.01f * frand() + 0.015f;	/* step de decréscimo da vida para cada iteração */
 	}
 
 	this->alive = true;

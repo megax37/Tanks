@@ -1,8 +1,7 @@
 #include "ParticleSceneNode.h"
 
-ParticleSceneNode::ParticleSceneNode(int particleCount) : SceneNode()
+ParticleSceneNode::ParticleSceneNode() : SceneNode()
 {
-	numParticles = particleCount;
 }
 
 ParticleSceneNode::~ParticleSceneNode()
@@ -14,6 +13,9 @@ void ParticleSceneNode::draw(Matrix4D parentTransform)
 	shaderProgram->BeginShader();
 
 	if (visible && meshObj) {
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		if (texture) {
 			texture->loadToShader(shaderProgram); // Load Texture
 
@@ -28,9 +30,16 @@ void ParticleSceneNode::draw(Matrix4D parentTransform)
 
 			texture->unloadFromShader(shaderProgram); // Unload Texture
 		}
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
 	}
 
 	shaderProgram->EndShader();
+}
+
+void ParticleSceneNode::setParticleCount(int particleCount)
+{
+	numParticles = particleCount;
 }
 
 void ParticleSceneNode::setParticlesTransforms(std::vector<Matrix4D> transforms)
@@ -41,4 +50,16 @@ void ParticleSceneNode::setParticlesTransforms(std::vector<Matrix4D> transforms)
 void ParticleSceneNode::setParticlesLifes(std::vector<float> lifes)
 {
 	particlesLifes = lifes;
+}
+
+ParticleSceneNode * ParticleSceneNode::copyNode()
+{
+	ParticleSceneNode* copy = new ParticleSceneNode();
+	copy->setMesh(this->meshObj);
+	copy->setMaterial(this->material);
+	copy->setShaderProgram(this->shaderProgram);
+	copy->setTexture(this->texture);
+	copy->setMatrix(this->modelMatrix);
+	copy->setScale(this->scaleMatrix);
+	return copy;
 }

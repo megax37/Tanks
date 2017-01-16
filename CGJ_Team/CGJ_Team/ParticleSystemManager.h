@@ -12,6 +12,9 @@ public:
 
 	void destroy();
 
+	void update(int elapsedTime);
+	void move();
+
 private:
 	static ParticleSystemManager* m_instance;
 

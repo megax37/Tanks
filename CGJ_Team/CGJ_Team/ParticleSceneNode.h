@@ -7,13 +7,16 @@ class ParticleSceneNode : public SceneNode
 {
 public:
 
-	ParticleSceneNode(int particleCount);
+	ParticleSceneNode();
 	~ParticleSceneNode();
 
 	virtual void draw(Matrix4D parentTransform) override;
 
+	void setParticleCount(int particleCount);
 	void setParticlesTransforms(std::vector<Matrix4D> transforms);
 	void setParticlesLifes(std::vector<float> lifes);
+
+	ParticleSceneNode* copyNode();
 
 private:
 

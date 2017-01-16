@@ -66,6 +66,18 @@ SceneNode * SceneNode::createNode()
 	return child;
 }
 
+SceneNode * SceneNode::copyNode()
+{
+	SceneNode* copy = new SceneNode();
+	copy->setMesh(this->meshObj);
+	copy->setMaterial(this->material);
+	copy->setShaderProgram(this->shaderProgram);
+	copy->setTexture(this->texture);
+	copy->setMatrix(this->modelMatrix);
+	copy->setScale(this->scaleMatrix);
+	return copy;
+}
+
 void SceneNode::addNode(SceneNode * child)
 {
 	child->setParent(this);

@@ -23,6 +23,7 @@ public:
 	bool isVisible();
 
 	SceneNode* createNode();
+	SceneNode* copyNode();
 	void addNode(SceneNode* child);
 	void applyLTransform(Matrix4D transform);
 	void applyRTransform(Matrix4D transform);

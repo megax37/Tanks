@@ -36,3 +36,17 @@ void ParticleSystemManager::destroy()
 {
 	particle_systems.clear();
 }
+
+void ParticleSystemManager::update(int elapsedTime)
+{
+	for (auto it = particle_systems.begin(); it != particle_systems.end(); ++it) {
+		it->second->update(elapsedTime);
+	}
+}
+
+void ParticleSystemManager::move()
+{
+	for (auto it = particle_systems.begin(); it != particle_systems.end(); ++it) {
+		it->second->move();
+	}
+}

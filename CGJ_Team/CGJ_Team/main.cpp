@@ -447,27 +447,43 @@ void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
 
 	int particleCount = 200;
 
-	ParticleSceneNode* explosionNode = new ParticleSceneNode(particleCount);
+	ParticleSceneNode* explosionNode = new ParticleSceneNode();
 	explosionNode->setMesh(mesh);
 	explosionNode->setTexture(tex);
 	explosionNode->setShaderProgram(shader);
 	explosionNode->setScale(scale(0.5f, 0.5f, 0.5f));
 	explosionNode->setVisible(false);
 
+	// Explosion 1
 	scenegraph->getRoot()->addNode(explosionNode);
 	explosion = new Explosion(explosionNode, particleCount);
 	ParticleSystemManager::instance()->add("Explosion", explosion);
-
-	explosionNode = new ParticleSceneNode(particleCount);
-	explosionNode->setMesh(mesh);
-	explosionNode->setTexture(tex);
-	explosionNode->setShaderProgram(shader);
-	explosionNode->setScale(scale(0.5f, 0.5f, 0.5f));
-	explosionNode->setVisible(false);
-
+	// Explosion 2
+	Explosion* explosion2;
+	explosionNode = explosionNode->copyNode();
 	scenegraph->getRoot()->addNode(explosionNode);
-	explosion = new Explosion(explosionNode, particleCount);
-	ParticleSystemManager::instance()->add("Explosion", explosion);
+	explosion2 = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion2);
+	// Explosion 3
+	explosionNode = explosionNode->copyNode();
+	scenegraph->getRoot()->addNode(explosionNode);
+	explosion2 = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion2);
+	// Explosion 4
+	explosionNode = explosionNode->copyNode();
+	scenegraph->getRoot()->addNode(explosionNode);
+	explosion2 = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion2);
+	// Explosion 5
+	explosionNode = explosionNode->copyNode();
+	scenegraph->getRoot()->addNode(explosionNode);
+	explosion2 = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion2);
+	// Explosion 6
+	explosionNode = explosionNode->copyNode();
+	scenegraph->getRoot()->addNode(explosionNode);
+	explosion2 = new Explosion(explosionNode, particleCount);
+	ParticleSystemManager::instance()->add("Explosion", explosion2);
 }
 
 void createScene()
@@ -532,7 +548,7 @@ void drawSceneGraph()
 	tankObject2->move();
 	bulletManager->move();
 	bulletManager2->move();
-	explosion->move();
+	ParticleSystemManager::instance()->move();
 	SceneGraphManager::instance()->get("main")->draw();
 
 	p1HUD->update();
@@ -555,9 +571,6 @@ void update() {
 	q = qFromAngleAxis(-RotationAngleY, AXIS3D_Y) * qFromAngleAxis(-RotationAngleX, AXIS3D_X) * q;
 	RotationAngleX = RotationAngleY = 0.0f;
 
-	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getTurretFront(), tankObject->getAngle());
-	if (KeyBuffer::instance()->isKeyDown('2')) bulletManager2->shoot(tankObject2->getPosition(), tankObject2->getTurretFront(), tankObject2->getAngle());
-
 	tankObject->update(elapsedTime);
 	if (tankObject->collides(tankObject2))
 	{
@@ -574,7 +587,10 @@ void update() {
 	bulletManager2->update(elapsedTime);
 	bulletManager2->checkCollisions(tankObject);
 
-	explosion->update(elapsedTime);
+	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getTurretFront(), tankObject->getAngle());
+	if (KeyBuffer::instance()->isKeyDown('2')) bulletManager2->shoot(tankObject2->getPosition(), tankObject2->getTurretFront(), tankObject2->getAngle());
+
+	ParticleSystemManager::instance()->update(elapsedTime);
 }
 
 /////////////////////////////////////////////////////////////////////// Callbacks
@@ -586,6 +602,7 @@ void cleanup()
 	MaterialManager::instance()->destroy();
 	ShaderProgramManager::instance()->destroy();
 	SceneGraphManager::instance()->destroy();
+	ParticleSystemManager::instance()->destroy();
 }
 
 void display()

@@ -3,7 +3,9 @@
 ParticleSystem::ParticleSystem(ParticleSceneNode * particleNode, int particleCount)
 {
 	particleSceneNode = particleNode;
+	particleSceneNode->setVisible(false);
 	numParticles = particleCount;
+	particleSceneNode->setParticleCount(numParticles);
 	alive = false;
 
 	particles.reserve(numParticles);
