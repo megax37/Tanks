@@ -14,6 +14,7 @@ public:
 
 	void update(int elapsedTime);
 	void move();
+	void reset();
 
 private:
 	static ParticleSystemManager* m_instance;

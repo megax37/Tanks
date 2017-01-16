@@ -59,3 +59,8 @@ void Bullet::explode() {
 	if (p != nullptr) p->initParticles(_position);
 	else std::cout << "Nao explodiu, demasiadas explosoes..." << std::endl;
 }
+
+void Bullet::reset() {
+	bullet->setVisible(false);
+	this->disable();
+}

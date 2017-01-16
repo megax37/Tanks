@@ -14,6 +14,7 @@ public:
 	void move();
 	void hitTank();
 	void hitBullet();
+	void reset();
 
 	Vector3D getFront();
 	Vector3D getTurretFront();

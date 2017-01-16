@@ -16,8 +16,11 @@ Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode
 	if (playerNumber == 1)
 		_position = Vector3D(0.0f, 0.0f, -5.0f);
 	
-	if (playerNumber == 2)
+	if (playerNumber == 2) {
 		_position = Vector3D(0.0f, 0.0f, 5.0f);
+		tankAngle = 180.0f;
+	}
+
 	_lastposition = _position;
 }
 
@@ -86,4 +89,24 @@ void Tank::hitTank() {
 
 void Tank::hitBullet() {
 	life--;
+}
+
+void Tank::reset() {
+	life = 3;
+
+	if (playerNumber == 1)
+		tankAngle = 0.0f;
+
+	if (playerNumber == 2)
+		tankAngle = 180.0f;
+
+	turretAngle = 0.0f;
+
+	if (playerNumber == 1)
+		_position = Vector3D(0.0f, 0.0f, -5.0f);
+
+	if (playerNumber == 2)
+		_position = Vector3D(0.0f, 0.0f, 5.0f);
+
+	_lastposition = _position;
 }

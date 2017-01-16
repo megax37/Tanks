@@ -20,6 +20,7 @@ public:
 	void shoot(Vector3D initialPosition, Vector3D front, float angle);
 	void move();
 	void checkCollisions(Tank * tank);
+	void reset();
 
 private:
 

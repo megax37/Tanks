@@ -11,6 +11,7 @@ public:
 	~HUD();
 
 	void update();
+	void reset();
 
 	
 private:

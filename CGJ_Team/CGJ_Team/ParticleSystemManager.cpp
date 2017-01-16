@@ -50,3 +50,10 @@ void ParticleSystemManager::move()
 		it->second->move();
 	}
 }
+
+void ParticleSystemManager::reset()
+{
+	for (auto it = particle_systems.begin(); it != particle_systems.end(); ++it) {
+		it->second->reset();
+	}
+}

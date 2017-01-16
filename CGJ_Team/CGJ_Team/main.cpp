@@ -51,6 +51,8 @@ float t = 0.0f;
 // Time update
 int lastTime = 0, elapsedTime = 0;
 
+bool gameOver = false;
+
 // Tank class to encapsulate behaviour
 Tank* tankObject;
 Tank* tankObject2;
@@ -83,6 +85,12 @@ void createTextures()
 
 	texture = new Texture("Textures/redMetal.tga");
 	TextureManager::instance()->add("redMetal", texture);
+
+	texture = new Texture("Textures/winScreen_1.tga");
+	TextureManager::instance()->add("winScreen_1", texture);
+
+	texture = new Texture("Textures/winScreen_2.tga");
+	TextureManager::instance()->add("winScreen_2", texture);
 }
 
 /////////////////////////////////////////////////////////////////////// Materials
@@ -387,6 +395,7 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 }
 
 SceneNode *p1_HUDBar_1, *p1_HUDBar_2, *p1_HUDBar_3, *p2_HUDBar_1, *p2_HUDBar_2, *p2_HUDBar_3;
+SceneNode *p1_Win, *p2_Win;
 
 void createHUDSceneGraph(SceneGraph* scenegraph)
 {
@@ -399,44 +408,62 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p1_HUDBar_1 = scenegraph->createNode();
 	p1_HUDBar_1->setMesh(mesh);
 	p1_HUDBar_1->setTexture(tex);
-	p1_HUDBar_1->setMatrix(translation(30.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_1->setMatrix(translation(30.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
 
 	p1_HUDBar_2 = scenegraph->createNode();
 	p1_HUDBar_2->setMesh(mesh);
 	p1_HUDBar_2->setTexture(tex);
-	p1_HUDBar_2->setMatrix(translation(90.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_2->setMatrix(translation(90.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
 
 	p1_HUDBar_3 = scenegraph->createNode();
 	p1_HUDBar_3->setMesh(mesh);
 	p1_HUDBar_3->setTexture(tex);
-	p1_HUDBar_3->setMatrix(translation(150.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_HUDBar_3->setMatrix(translation(150.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
-
 
 	tex = TextureManager::instance()->get("redMetal");
 
 	p2_HUDBar_1 = scenegraph->createNode();
 	p2_HUDBar_1->setMesh(mesh);
 	p2_HUDBar_1->setTexture(tex);
-	p2_HUDBar_1->setMatrix(translation(610.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_1->setMatrix(translation(610.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
 
 	p2_HUDBar_2 = scenegraph->createNode();
 	p2_HUDBar_2->setMesh(mesh);
 	p2_HUDBar_2->setTexture(tex);
-	p2_HUDBar_2->setMatrix(translation(550.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_2->setMatrix(translation(550.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
 
 	p2_HUDBar_3 = scenegraph->createNode();
 	p2_HUDBar_3->setMesh(mesh);
 	p2_HUDBar_3->setTexture(tex);
-	p2_HUDBar_3->setMatrix(translation(490.0f, 15.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_HUDBar_3->setMatrix(translation(490.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
 
 	p1HUD = new HUD(p1_HUDBar_1, p1_HUDBar_2, p1_HUDBar_3, tankObject);
 	p2HUD = new HUD(p2_HUDBar_1, p2_HUDBar_2, p2_HUDBar_3, tankObject2);
+
+
+	tex = TextureManager::instance()->get("winScreen_1");
+
+	p1_Win = scenegraph->createNode();
+	p1_Win->setMesh(mesh);
+	p1_Win->setTexture(tex);
+	p1_Win->setMatrix(translation(320.0f, 240.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p1_Win->setScale(scale(320.0f, 0.1f, 240.0f));
+	p1_Win->setVisible(false);
+
+	tex = TextureManager::instance()->get("winScreen_2");
+
+	p2_Win = scenegraph->createNode();
+	p2_Win->setMesh(mesh);
+	p2_Win->setTexture(tex);
+	p2_Win->setMatrix(translation(320.0f, 240.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
+	p2_Win->setScale(scale(320.0f, 0.1f, 240.0f));
+	p2_Win->setVisible(false);
 }
 
 void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
@@ -558,13 +585,42 @@ void drawSceneGraph()
 
 /////////////////////////////////////////////////////////////////////// Scene
 
+void checkOver(int i) {
+	if (gameOver == true)
+		glutTimerFunc(0, checkOver, 0);
+}
+
 void drawScene()
 {
+	if (tankObject->getLife() == 0) {
+		gameOver = true;
+		p2_Win->setVisible(true);
+	}
+	if (tankObject2->getLife() == 0) {
+		gameOver = true;
+		p1_Win->setVisible(true);
+	}
+
 	drawSceneGraph();
 	ASSERT_GL_ERROR("ERROR: Could not draw scene.");
+
+	glutTimerFunc(0, checkOver, 0);
 }
 
 /////////////////////////////////////////////////////////////////////// Simulation
+
+void restartGame() {
+	tankObject->reset();
+	tankObject2->reset();
+	p1HUD->reset();
+	p2HUD->reset();
+	bulletManager->reset();
+	bulletManager2->reset();
+	ParticleSystemManager::instance()->reset();
+
+	p1_Win->setVisible(false);
+	p2_Win->setVisible(false);
+}
 
 void update() {
 
@@ -618,9 +674,11 @@ void idle()
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	elapsedTime = currentTime - lastTime;
 	lastTime = currentTime;
-	update();
 
-	glutPostRedisplay();
+	if (gameOver == false) {
+		update();
+		glutPostRedisplay();
+	}
 }
 
 void keyboard_down(unsigned char key, int x, int y)
@@ -646,6 +704,12 @@ void keyboard_down(unsigned char key, int x, int y)
 		break;
 	case 'e':
 		explosion->initParticles(Vector3D(0.0f, 4.0f, 0.0f));
+		break;
+	case 'r':
+		if (gameOver == true) {
+			restartGame();
+			gameOver = false;
+		}
 		break;
 	}
 }
@@ -730,6 +794,7 @@ void setupCallbacks()
 	glutReshapeFunc(reshape);
 
 	glutTimerFunc(0, timer, 0);
+	glutTimerFunc(0, checkOver, 0);
 }
 
 void setupOpenGL() {

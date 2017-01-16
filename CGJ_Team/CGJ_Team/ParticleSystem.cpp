@@ -79,6 +79,32 @@ void ParticleSystem::move()
 	}
 }
 
+void ParticleSystem::reset()
+{
+	particleSceneNode->setVisible(false);
+	alive = false;
+
+	Matrix4D m = identity();
+
+	for (int i = 0; i < numParticles; i++)
+	{
+		particles[i].x = 0.0f;
+		particles[i].y = 0.0f;
+		particles[i].z = 0.0f;
+		particles[i].vx = 0.0f;
+		particles[i].vy = 0.0f;
+		particles[i].vz = 0.0f;
+		particles[i].ax = 0.0f;
+		particles[i].ay = 0.0f;
+		particles[i].az = 0.0f;
+		particles[i].life = 0.0f;
+		particles[i].fade = 0.0f;
+
+		particlesTransforms[i] = m;
+		particlesLifes[i] = 0.0f;
+	}
+}
+
 bool ParticleSystem::isAlive()
 {
 	return alive;

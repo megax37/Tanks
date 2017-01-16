@@ -31,3 +31,10 @@ void HUD::update()
 		HUDBar1->setVisible(false);
 	}
 }
+
+void HUD::reset()
+{
+	HUDBar1->setVisible(true);
+	HUDBar2->setVisible(true);
+	HUDBar3->setVisible(true);
+}

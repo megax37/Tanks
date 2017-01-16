@@ -68,3 +68,12 @@ void BulletManager::checkCollisions(Tank * tank) {
 		}
 	}
 }
+
+void BulletManager::reset() {
+	shooting = false;
+	timeBuffer = 0;
+
+	for each (Bullet * bullet in bullets) {
+		bullet->reset();
+	}
+}

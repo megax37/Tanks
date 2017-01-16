@@ -25,6 +25,7 @@ public:
 
 	void update(int elapsedTime);
 	void move();
+	void reset();
 
 	bool isAlive();
 
