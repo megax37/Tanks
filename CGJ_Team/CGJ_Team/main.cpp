@@ -449,32 +449,36 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	ground->setTexture(tex);
 	ground->setMaterial(mat);
 	//ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
-	//ground->setScale(scale(15.0f, 0.1f, 15.0f));
+	ground->setScale(scale(0.6f, 1.0f, 0.6f));
 
 	SceneNode *cliff = scenegraph->createNode();
 	cliff->setMesh(MeshManager::instance()->get("cliff"));
 	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	cliff->setScale(scale(0.6f, 0.6f, 0.6f));
 
 	cliff = scenegraph->createNode();
 	cliff->setMesh(MeshManager::instance()->get("cliff"));
 	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	cliff->setMatrix(rotation(90.0f, AXIS3D_Y));
+	cliff->setScale(scale(0.6f, 0.6f, 0.6f));
 
 	cliff = scenegraph->createNode();
 	cliff->setMesh(MeshManager::instance()->get("cliff"));
 	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	cliff->setMatrix(rotation(180.0f, AXIS3D_Y));
+	cliff->setScale(scale(0.6f, 0.6f, 0.6f));
 
 	cliff = scenegraph->createNode();
 	cliff->setMesh(MeshManager::instance()->get("cliff"));
 	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	cliff->setMatrix(rotation(270.0f, AXIS3D_Y));
+	cliff->setScale(scale(0.6f, 0.6f, 0.6f));
 
 	SceneNode *p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("busted_tank"));
 	p->setMaterial(MaterialManager::instance()->get("TankGrey"));
 	
-	props.push_back(new StaticObject(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+	props.push_back(new StaticObject(Vector3D(), -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
 
 }
 

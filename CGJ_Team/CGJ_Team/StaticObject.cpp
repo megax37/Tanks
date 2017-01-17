@@ -8,7 +8,7 @@ void StaticObject::move() {
 
 }
 
-StaticObject::StaticObject(float minX, float maxX, float minY, float maxY, float minZ, float maxZ) : Collider(minX, maxX, minY, maxY, minZ, maxZ)
+StaticObject::StaticObject(Vector3D position, float minX, float maxX, float minY, float maxY, float minZ, float maxZ) : Collider(minX, maxX, minY, maxY, minZ, maxZ)
 {
-
+	_position = position;
 }
