@@ -474,12 +474,96 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	cliff->setMatrix(rotation(270.0f, AXIS3D_Y));
 	cliff->setScale(scale(0.6f, 0.6f, 0.6f));
 
+	Vector3D position = Vector3D(9.0f, 0.0f, -7.0f);
 	SceneNode *p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(-17.0f, 0.0f, -19.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(-21.0f, 0.0f, -9.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(-13.0f, 0.0f, 0.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(-8.0f, 0.0f, 6.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(17.0f, 0.0f, 18.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(12.0f, 0.0f, -20.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("cactus"));
+	p->setMaterial(MaterialManager::instance()->get("TankColour"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.0f, 1.0, 0.0f, 2.0f, -1.0f, 1.0f)); //Cactus
+
+	position = Vector3D(-6.0f, 0.0f, -22.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("rocks1"));
+	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -2.6f, 2.6, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
+
+	position = Vector3D(6.0f, 0.0f, -16.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("rocks1"));
+	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -2.6f, 2.6, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
+
+	position = Vector3D(-19.0f, 0.0f, 14.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("rocks2"));
+	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -2.5f, 1.5, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
+
+	position = Vector3D(-10.0f, 0.0f, 21.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("rocks2"));
+	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -2.5f, 1.5, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
+
+	position = Vector3D(5.0f, 0.0f, 12.0f);
+	p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("rocks3"));
+	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -2.2f, 2.1, 0.0f, 1.0f, -3.5f, 2.3f)); //Rocks 03
+
+	position = Vector3D(19.0f, 0.0f, 6.0f);
+	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("busted_tank"));
 	p->setMaterial(MaterialManager::instance()->get("TankGrey"));
-	
-	props.push_back(new StaticObject(Vector3D(), -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
-
+	p->setMatrix(translation(position));
+	props.push_back(new StaticObject(position, -1.2f, 2.5, 0.0f, 3.0f, -1.0f, 1.0f)); //BustedTank
 }
 
 SceneNode *p1_HUDBar_1, *p1_HUDBar_2, *p1_HUDBar_3, *p2_HUDBar_1, *p2_HUDBar_2, *p2_HUDBar_3;
