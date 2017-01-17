@@ -9,6 +9,7 @@
 #include "BulletManager.h"
 #include "HUD.h"
 #include "Explosion.h"
+#include "Sandtrail.h"
 #include "SceneGraph.h"
 // Managersdddo
 #include "MeshManager.h"
@@ -61,18 +62,13 @@ BulletManager * bulletManager2;
 HUD* p1HUD;
 HUD* p2HUD;
 Explosion * explosion;
+Sandtrail * sandtrail;
 
 /////////////////////////////////////////////////////////////////////// Textures
 
 void createTextures()
 {
 	Texture* texture;
-	//texture = new Texture("Textures/wood-texture.jpg");
-	texture = new Texture("Textures/lightwood.tga");
-	TextureManager::instance()->add("wood", texture);
-
-	texture = new Texture("Textures/stone.tga");
-	TextureManager::instance()->add("stone", texture);
 
 	texture = new Texture("Textures/desert.jpg");
 	TextureManager::instance()->add("desert", texture);
@@ -180,6 +176,7 @@ void createMeshes()
 void createShaderPrograms()
 {
 	ShaderProgram* program;
+	// Main simple shader
 	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/cube_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/cube_fs.glsl");
@@ -197,7 +194,7 @@ void createShaderPrograms()
 	program->addUniformBlock("Camera", UBO_BP);
 	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("Basic", program);
-
+	// Tank shader
 	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/tank_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/tank_fs.glsl");
@@ -215,7 +212,7 @@ void createShaderPrograms()
 	program->addUniformBlock("Camera", UBO_BP);
 	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("tank", program);
-
+	// HUD shader
 	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/hud_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/hud_fs.glsl");
@@ -227,7 +224,7 @@ void createShaderPrograms()
 	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP2);
 	ShaderProgramManager::instance()->add("HUD", program);
-
+	// Explosion particles
 	program = new ShaderProgram();
 	program->addShader(GL_VERTEX_SHADER, "Shaders/explosion_vs.glsl");
 	program->addShader(GL_FRAGMENT_SHADER, "Shaders/explosion_fs.glsl");
@@ -241,6 +238,20 @@ void createShaderPrograms()
 	program->addUniform("Life");
 	program->addUniformBlock("Camera", UBO_BP);
 	ShaderProgramManager::instance()->add("explosion", program);
+	// Sand trail particles
+	program = new ShaderProgram();
+	program->addShader(GL_VERTEX_SHADER, "Shaders/sandtrail_vs.glsl");
+	program->addShader(GL_FRAGMENT_SHADER, "Shaders/sandtrail_fs.glsl");
+	program->addAttribute("inPosition", VERTICES);
+	program->addAttribute("inTexcoord", TEXCOORDS);
+	program->addAttribute("inNormal", NORMALS);
+	program->create();
+	program->addUniform("ModelMatrix");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
+	program->addUniform("Life");
+	program->addUniformBlock("Camera", UBO_BP);
+	ShaderProgramManager::instance()->add("sandtrail", program);
 }
 
 /////////////////////////////////////////////////////////////////////// SceneGraph
@@ -472,14 +483,15 @@ void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
 	Texture* tex = TextureManager::instance()->get("particle");
 	ShaderProgram* shader = ShaderProgramManager::instance()->get("explosion");
 
-	int particleCount = 200;
+	int particleCount;
 
+	//Explosions
+	particleCount = 250;
 	ParticleSceneNode* explosionNode = new ParticleSceneNode();
 	explosionNode->setMesh(mesh);
 	explosionNode->setTexture(tex);
 	explosionNode->setShaderProgram(shader);
 	explosionNode->setScale(scale(0.5f, 0.5f, 0.5f));
-	explosionNode->setVisible(false);
 
 	// Explosion 1
 	scenegraph->getRoot()->addNode(explosionNode);
@@ -511,6 +523,27 @@ void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
 	scenegraph->getRoot()->addNode(explosionNode);
 	explosion2 = new Explosion(explosionNode, particleCount);
 	ParticleSystemManager::instance()->add("Explosion", explosion2);
+
+	// Sandtrails
+	particleCount = 50;
+	shader = ShaderProgramManager::instance()->get("sandtrail");
+	ParticleSceneNode* sandtrailNode = explosionNode->copyNode();
+	sandtrailNode->setShaderProgram(shader);
+	sandtrailNode->setScale(scale(0.25f, 0.25f, 0.25f));
+	//Sandtrail* sandtrail;
+
+	// Sandtrail 1
+	scenegraph->getRoot()->addNode(sandtrailNode);
+	sandtrail = new Sandtrail(sandtrailNode, particleCount);
+	ParticleSystemManager::instance()->add("Sandtrail", sandtrail);
+	// Sandtrail 2
+	sandtrailNode = sandtrailNode->copyNode();
+	scenegraph->getRoot()->addNode(sandtrailNode);
+	Sandtrail* sandtrail2 = new Sandtrail(sandtrailNode, particleCount);
+	ParticleSystemManager::instance()->add("Sandtrail", sandtrail2);
+
+	tankObject->setTrails(sandtrail, sandtrail2);
+	tankObject2->setTrails(sandtrail, sandtrail2);
 }
 
 void createScene()
@@ -585,11 +618,6 @@ void drawSceneGraph()
 
 /////////////////////////////////////////////////////////////////////// Scene
 
-void checkOver(int i) {
-	if (gameOver == true)
-		glutTimerFunc(0, checkOver, 0);
-}
-
 void drawScene()
 {
 	if (tankObject->getLife() == 0) {
@@ -603,8 +631,6 @@ void drawScene()
 
 	drawSceneGraph();
 	ASSERT_GL_ERROR("ERROR: Could not draw scene.");
-
-	glutTimerFunc(0, checkOver, 0);
 }
 
 /////////////////////////////////////////////////////////////////////// Simulation
@@ -675,7 +701,7 @@ void idle()
 	elapsedTime = currentTime - lastTime;
 	lastTime = currentTime;
 
-	if (gameOver == false) {
+	if (!gameOver) {
 		update();
 		glutPostRedisplay();
 	}
@@ -705,8 +731,11 @@ void keyboard_down(unsigned char key, int x, int y)
 	case 'e':
 		explosion->initParticles(Vector3D(0.0f, 4.0f, 0.0f));
 		break;
+	case 'f':
+		sandtrail->initParticles(Vector3D(0.0f, 4.0f, 0.0f));
+		break;
 	case 'r':
-		if (gameOver == true) {
+		if (gameOver) {
 			restartGame();
 			gameOver = false;
 		}
@@ -794,7 +823,6 @@ void setupCallbacks()
 	glutReshapeFunc(reshape);
 
 	glutTimerFunc(0, timer, 0);
-	glutTimerFunc(0, checkOver, 0);
 }
 
 void setupOpenGL() {

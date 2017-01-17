@@ -7,6 +7,9 @@
 #define DEGREES_TO_RADIANS 0.01745329251994329547
 #define RADIANS_TO_DEGREES 57.29577951308232185913
 
+class Vector3D;
+class Vector4D;
+
 class Vector2D {
 
 public:
@@ -86,6 +89,8 @@ public:
 	const float setY(float value);
 	const float setZ(float value);
 
+	Vector4D toVec4();
+
 	float x, y, z;
 
 private:
@@ -133,6 +138,8 @@ public:
 	const float setY(float value);
 	const float setZ(float value);
 	const float setW(float value);
+
+	Vector3D toVec3();
 
 	float x, y, z, w;
 

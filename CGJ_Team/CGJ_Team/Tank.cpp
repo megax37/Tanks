@@ -22,6 +22,10 @@ Tank::Tank(SceneNode * base, SceneNode * FLwheel, SceneNode * FRwheel, SceneNode
 	}
 
 	_lastposition = _position;
+
+	leftTrailRelativePos = Vector3D(0.6f, 0.2f, -1.0f);
+	rightTrailRelativePos = Vector3D(-0.6f, 0.2f, -1.0f);
+	timeBuffer = 0;
 }
 
 Tank::~Tank()
@@ -33,20 +37,21 @@ void Tank::update(int elapsedTime)
 	float astep = 0.15f * elapsedTime;
 	float vstep = 0.008f * elapsedTime;
 
+	_lastposition = _position;
 	
 	if (playerNumber == 1) {
 		if (KeyBuffer::instance()->isKeyDown('a')) tankAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('d')) tankAngle -= astep;
-		if (KeyBuffer::instance()->isKeyDown('w')) { _lastposition = _position; _position = _position + front * vstep;  }
-		if (KeyBuffer::instance()->isKeyDown('s')) { _lastposition = _position; _position = _position - front * vstep; }
+		if (KeyBuffer::instance()->isKeyDown('w')) {_position = _position + front * vstep;  }
+		if (KeyBuffer::instance()->isKeyDown('s')) {_position = _position - front * vstep; }
 		if (KeyBuffer::instance()->isKeyDown('z')) turretAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('x')) turretAngle -= astep;
 	}
 	if (playerNumber == 2) {
 		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_LEFT)) tankAngle += astep;
 		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_RIGHT)) tankAngle -= astep;
-		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_UP)) { _lastposition = _position; _position = _position + front * vstep; }
-		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_DOWN)) { _lastposition = _position; _position = _position - front * vstep; }
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_UP)) {_position = _position + front * vstep; }
+		if (KeyBuffer::instance()->isSpecialKeyDown(GLUT_KEY_DOWN)) {_position = _position - front * vstep; }
 		if (KeyBuffer::instance()->isKeyDown('0')) turretAngle += astep;
 		if (KeyBuffer::instance()->isKeyDown('.')) turretAngle -= astep;
 	}
@@ -59,12 +64,22 @@ void Tank::update(int elapsedTime)
 	Quaternion turretQI(AXIS3D_Z);
 	Quaternion turretQ = turretQR * turretQI * qInverse(turretQR);
 	turretFront = Vector3D(turretQ.x, turretQ.y, turretQ.z);
+
+	timeBuffer += elapsedTime;
 }
 
 void Tank::move()
 {
 	tankBase->setMatrix(translation(_position) * rotation(tankAngle, AXIS3D_Y));
 	tankTurret->setMatrix(rotation(turretAngle, AXIS3D_Y));
+
+	if ((_position - _lastposition).magnitude() > 0.1f && timeBuffer > 200) {
+		Vector4D lpos = leftTrailRelativePos.toVec4() * (translation(_lastposition) * rotation(tankAngle, AXIS3D_Y));
+		leftTrail->initParticles(lpos.toVec3());
+		Vector4D rpos = rightTrailRelativePos.toVec4() * (translation(_lastposition) * rotation(tankAngle, AXIS3D_Y));
+		rightTrail->initParticles(rpos.toVec3());
+		timeBuffer = 0;
+	}
 }
 
 Vector3D Tank::getFront() {
@@ -81,6 +96,12 @@ float Tank::getAngle() {
 
 int Tank::getLife() {
 	return life;
+}
+
+void Tank::setTrails(ParticleSystem * left, ParticleSystem * right)
+{
+	leftTrail = left;
+	rightTrail = right;
 }
 
 void Tank::hitTank() {

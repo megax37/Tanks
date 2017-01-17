@@ -266,6 +266,11 @@ const float Vector3D::setZ(float value) {
 	return this->z = value;
 }
 
+Vector4D Vector3D::toVec4()
+{
+	return Vector4D(x, y, z, 1.0f);
+}
+
 
 //--------------------------------------------
 //--------------------------------------------
@@ -427,4 +432,9 @@ const float Vector4D::setZ(float value) {
 }
 const float Vector4D::setW(float value) {
 	return this->w = value;
+}
+
+Vector3D Vector4D::toVec3()
+{
+	return Vector3D(x, y, z);
 }

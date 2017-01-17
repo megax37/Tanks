@@ -135,6 +135,7 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Sandtrail.cpp" />
     <ClCompile Include="SceneGraph.cpp" />
     <ClCompile Include="SceneGraphManager.cpp" />
     <ClCompile Include="SceneNode.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Sandtrail.h" />
     <ClInclude Include="SceneGraph.h" />
     <ClInclude Include="SceneGraphManager.h" />
     <ClInclude Include="SceneNode.h" />
@@ -181,6 +183,8 @@
     <None Include="Shaders\cube_vs.glsl" />
     <None Include="Shaders\explosion_fs.glsl" />
     <None Include="Shaders\explosion_vs.glsl" />
+    <None Include="Shaders\sandtrail_fs.glsl" />
+    <None Include="Shaders\sandtrail_vs.glsl" />
     <None Include="Shaders\tank_fs.glsl" />
     <None Include="Shaders\tank_vs.glsl" />
   </ItemGroup>

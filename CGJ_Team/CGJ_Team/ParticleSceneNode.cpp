@@ -16,6 +16,7 @@ void ParticleSceneNode::draw(Matrix4D parentTransform)
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		if (texture) {
 			texture->loadToShader(shaderProgram); // Load Texture
 

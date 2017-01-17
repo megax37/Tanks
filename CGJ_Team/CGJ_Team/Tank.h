@@ -3,6 +3,7 @@
 
 #include "SceneNode.h"
 #include "Collider.h"
+#include "ParticleSystemManager.h"
 
 class Tank : public Collider
 {
@@ -21,6 +22,8 @@ public:
 	float getAngle();
 	int getLife();
 
+	void setTrails(ParticleSystem* left, ParticleSystem* right);
+
 	
 private:
 
@@ -36,6 +39,11 @@ private:
 
 	float tankAngle = 0.0f;
 	float turretAngle = 0.0f;
+
+	ParticleSystem* leftTrail, *rightTrail;
+	Vector3D leftTrailRelativePos;
+	Vector3D rightTrailRelativePos;
+	int timeBuffer;
 
 	Vector3D AXIS3D_X = Vector3D(1.0f, 0.0f, 0.0f);
 	Vector3D AXIS3D_Y = Vector3D(0.0f, 1.0f, 0.0f);

@@ -99,6 +99,9 @@
     <ClCompile Include="ParticleSystemManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sandtrail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -188,6 +191,9 @@
     <ClInclude Include="ParticleSystemManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sandtrail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\cube_fs.glsl">
@@ -206,6 +212,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Shaders\explosion_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\sandtrail_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\sandtrail_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
