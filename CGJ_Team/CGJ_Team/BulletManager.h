@@ -2,6 +2,8 @@
 #ifndef _BULLETMANAGER_
 #define _BULLETMANAGER_
 
+class Tank;
+
 #include "SceneNode.h"
 #include "Bullet.h"
 #include "ShaderProgramManager.h"
@@ -17,7 +19,7 @@ public:
 	~BulletManager();
 
 	void update(int elapsedTime);
-	void shoot(Vector3D initialPosition, Vector3D front, float angle);
+	void shoot(Vector3D initialPosition, Vector3D front, float angle, int force);
 	void move();
 	void checkCollisions(Tank * tank);
 	void reset();
@@ -28,7 +30,7 @@ private:
 	std::vector<Bullet*> bullets;
 
 	Vector3D offsetPosition = Vector3D(0.1f, 1.25f, 0.0f);
-	Vector3D offsetVelocity = Vector3D(0.0f, 0.2f, 0.0f);
+	Vector3D offsetVelocity = Vector3D(0.0f, 0.25f, 0.0f);
 
 	bool shooting;
 	int timeBuffer;

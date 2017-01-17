@@ -17,6 +17,7 @@ public:
 
 	void setVelocity(Vector3D vel);
 	void setAngle(float theta);
+	void setForce(int force);
 
 	void enable();
 	void disable();
@@ -28,8 +29,8 @@ private:
 
 	SceneNode* bullet;
 
-	float vspeed = 0.009f;
-	float gspeed = 0.0002f;
+	float vspeed;
+	float gspeed;
 
 	Vector3D velocity;
 	float angle = 0; 

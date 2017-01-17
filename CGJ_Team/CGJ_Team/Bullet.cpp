@@ -4,6 +4,8 @@ Bullet::Bullet(SceneNode * bulletSceneNode) : Collider(-0.1f, 0.1f, 0.0f, 0.28f,
 {
 	bullet = bulletSceneNode;
 	fired = false;
+	vspeed = 0.01f;
+	gspeed = 0.00075f;
 }
 
 Bullet::~Bullet()
@@ -34,6 +36,11 @@ void Bullet::setVelocity(Vector3D vel)
 void Bullet::setAngle(float theta)
 {
 	angle = theta;
+}
+
+void Bullet::setForce(int force)
+{
+	vspeed = 0.0001f * force;
 }
 
 void Bullet::enable()

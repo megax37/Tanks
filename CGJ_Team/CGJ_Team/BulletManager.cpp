@@ -36,7 +36,7 @@ void BulletManager::update(int elapsedTime) {
 	timeBuffer += elapsedTime;
 }
 
-void BulletManager::shoot(Vector3D initialPosition, Vector3D front, float angle) {
+void BulletManager::shoot(Vector3D initialPosition, Vector3D front, float angle, int force) {
 
 	if (timeBuffer > 300) {
 		for each (Bullet * bullet in bullets)
@@ -45,6 +45,7 @@ void BulletManager::shoot(Vector3D initialPosition, Vector3D front, float angle)
 				bullet->setPosition(initialPosition + offsetPosition);
 				bullet->setVelocity(front + offsetVelocity);
 				bullet->setAngle(angle);
+				bullet->setForce(force);
 				bullet->enable();
 				timeBuffer = 0;
 				break;

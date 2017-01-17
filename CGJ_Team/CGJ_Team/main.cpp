@@ -31,7 +31,7 @@ unsigned int FrameCount = 0;
 GLuint UBO_BP = 0, UBO_BP1 = 1, UBO_BP2 = 2;
 
 const float DistanceStep = 1.5f;
-float Distance = 25.0f;
+float Distance = 45.0f;
 
 int LastMousePositionX, LastMousePositionY;
 float RotationAngleY = 45.0f;
@@ -425,8 +425,12 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	othersTank2->setMesh(mesh);
 	othersTank2->setMaterial(mat);
 
-	tankObject = new Tank(tankBase, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, tankTurret, 1);
-	tankObject2 = new Tank(tankBase2, frontLeftWheel2, frontRightWheel2, backLeftWheel2, backRightWheel2, tankTurret2, 2);
+	// Bullet Managers
+	bulletManager = new BulletManager(scenegraph->getRoot(), 5);
+	bulletManager2 = new BulletManager(scenegraph->getRoot(), 5);
+
+	tankObject = new Tank(tankBase, tankTurret, bulletManager, 1);
+	tankObject2 = new Tank(tankBase2, tankTurret2, bulletManager2, 2);
 }
 
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)
@@ -620,7 +624,7 @@ void createScene()
 	SceneGraph* scenegraph = new SceneGraph();
 	scenegraph->setCamera(new Camera(UBO_BP));
 
-	scenegraph->getCamera()->setProjectionMatrix(perspectiveMatrix(30.0f, 640.0f / 480.0f, 1.0f, 100.0f));
+	scenegraph->getCamera()->setProjectionMatrix(perspectiveMatrix(30.0f, 640.0f / 480.0f, 1.0f, 500.0f));
 	scenegraph->getCamera()->setAltProjectionMatrix(orthographicMatrix(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 100.0f));
 
 	//scenegraph->setLight(new DirectionalLight(Vector3D(1.0f, 0.6f, 0.25f), Vector3D(0.8f, 0.47f, 0.18f), UBO_BP1));
@@ -633,8 +637,6 @@ void createScene()
 	createTankSceneGraph(scenegraph);
 	createParticlesEffectsSceneGraph(scenegraph);
 
-	bulletManager = new BulletManager(groundRoot, 5);
-	bulletManager2 = new BulletManager(groundRoot, 5);
 	SceneGraphManager::instance()->add("main", scenegraph);
 
 
@@ -749,9 +751,6 @@ void update() {
 
 	bulletManager2->update(elapsedTime);
 	bulletManager2->checkCollisions(tankObject);
-
-	if (KeyBuffer::instance()->isKeyDown('q')) bulletManager->shoot(tankObject->getPosition(), tankObject->getTurretFront(), tankObject->getAngle());
-	if (KeyBuffer::instance()->isKeyDown('2')) bulletManager2->shoot(tankObject2->getPosition(), tankObject2->getTurretFront(), tankObject2->getAngle());
 
 	ParticleSystemManager::instance()->update(elapsedTime);
 }
