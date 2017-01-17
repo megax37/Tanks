@@ -11,6 +11,7 @@
 #include "Explosion.h"
 #include "Sandtrail.h"
 #include "SceneGraph.h"
+#include "StaticObject.h"
 // Managersdddo
 #include "MeshManager.h"
 #include "MaterialManager.h"
@@ -57,6 +58,7 @@ bool gameOver = false;
 // Tank class to encapsulate behaviour
 Tank* tankObject;
 Tank* tankObject2;
+std::vector<StaticObject*> props;
 BulletManager * bulletManager;
 BulletManager * bulletManager2;
 HUD* p1HUD;
@@ -111,6 +113,19 @@ void createMaterials()
 
 	material = new Material("Models/Ground.mtl");
 	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Environment/YellowDark.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Environment/YellowLight.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Environment/Green.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
+	material = new Material("Models/Environment/TankGrey.mtl");
+	MaterialManager::instance()->add(material->MaterialName(), material);
+
 }
 
 /////////////////////////////////////////////////////////////////////// Meshes
@@ -169,6 +184,34 @@ void createMeshes()
 	mesh = new Mesh("Models/quad.obj");
 	mesh->create();
 	MeshManager::instance()->add("quad", mesh);
+
+	mesh = new Mesh("Models/Environment/terrain.obj");
+	mesh->create();
+	MeshManager::instance()->add("terrain", mesh);
+
+	mesh = new Mesh("Models/Environment/cliff.obj");
+	mesh->create();
+	MeshManager::instance()->add("cliff", mesh);
+
+	mesh = new Mesh("Models/Environment/busted_tank.obj");
+	mesh->create();
+	MeshManager::instance()->add("busted_tank", mesh);
+
+	mesh = new Mesh("Models/Environment/cactus.obj");
+	mesh->create();
+	MeshManager::instance()->add("cactus", mesh);
+
+	mesh = new Mesh("Models/Environment/rocks1.obj");
+	mesh->create();
+	MeshManager::instance()->add("rocks1", mesh);
+
+	mesh = new Mesh("Models/Environment/rocks2.obj");
+	mesh->create();
+	MeshManager::instance()->add("rocks2", mesh);
+
+	mesh = new Mesh("Models/Environment/rocks3.obj");
+	mesh->create();
+	MeshManager::instance()->add("rocks3", mesh);
 }
 
 /////////////////////////////////////////////////////////////////////// Shaders
@@ -393,16 +436,42 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	Material* mat;
 	
 	// Ground
-	mesh = MeshManager::instance()->get("cube");
+	mesh = MeshManager::instance()->get("terrain");
 	tex = TextureManager::instance()->get("desert");
-	mat = MaterialManager::instance()->get("Ground");
+	mat = MaterialManager::instance()->get("YellowLight");
 
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
 	ground->setTexture(tex);
 	ground->setMaterial(mat);
-	ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
-	ground->setScale(scale(15.0f, 0.1f, 15.0f));
+	//ground->setMatrix(translation(0.0f, -0.1f, 0.0f));
+	//ground->setScale(scale(15.0f, 0.1f, 15.0f));
+
+	SceneNode *cliff = scenegraph->createNode();
+	cliff->setMesh(MeshManager::instance()->get("cliff"));
+	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
+
+	cliff = scenegraph->createNode();
+	cliff->setMesh(MeshManager::instance()->get("cliff"));
+	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	cliff->setMatrix(rotation(90.0f, AXIS3D_Y));
+
+	cliff = scenegraph->createNode();
+	cliff->setMesh(MeshManager::instance()->get("cliff"));
+	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	cliff->setMatrix(rotation(180.0f, AXIS3D_Y));
+
+	cliff = scenegraph->createNode();
+	cliff->setMesh(MeshManager::instance()->get("cliff"));
+	cliff->setMaterial(MaterialManager::instance()->get("YellowDark"));
+	cliff->setMatrix(rotation(270.0f, AXIS3D_Y));
+
+	SceneNode *p = scenegraph->createNode();
+	p->setMesh(MeshManager::instance()->get("busted_tank"));
+	p->setMaterial(MaterialManager::instance()->get("TankGrey"));
+	
+	props.push_back(new StaticObject(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+
 }
 
 SceneNode *p1_HUDBar_1, *p1_HUDBar_2, *p1_HUDBar_3, *p2_HUDBar_1, *p2_HUDBar_2, *p2_HUDBar_3;
@@ -663,6 +732,18 @@ void update() {
 	{
 		tankObject2->hitTank();
 	}
+
+	for each(StaticObject * o in props) {
+		if (tankObject->collides(o))
+		{
+			tankObject->hitTank();
+		}
+		if (tankObject2->collides(o))
+		{
+			tankObject2->hitTank();
+		}
+	}
+
 	bulletManager->update(elapsedTime);
 	bulletManager->checkCollisions(tankObject2);
 
