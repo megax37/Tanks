@@ -295,6 +295,24 @@ void createShaderPrograms()
 	program->addUniform("Life");
 	program->addUniformBlock("Camera", UBO_BP);
 	ShaderProgramManager::instance()->add("sandtrail", program);
+	// Silhouette shader
+	program = new ShaderProgram();
+	program->addShader(GL_VERTEX_SHADER, "Shaders/silhouette_vs.glsl");
+	program->addShader(GL_FRAGMENT_SHADER, "Shaders/silhouette_fs.glsl");
+	program->addAttribute("inPosition", VERTICES);
+	program->addAttribute("inTexcoord", TEXCOORDS);
+	program->addAttribute("inNormal", NORMALS);
+	program->create();
+	program->addUniform("ModelMatrix");
+	program->addUniform("NormalMatrix");
+	program->addUniform("DiffuseReflectivity");
+	program->addUniform("SpecularReflectivity");
+	program->addUniform("SpecularExponent");
+	program->addUniform("Texmap");
+	program->addUniform("TexMode");
+	program->addUniformBlock("Camera", UBO_BP);
+	program->addUniformBlock("DirectionalLight", UBO_BP1);
+	ShaderProgramManager::instance()->add("silhouette", program);
 }
 
 /////////////////////////////////////////////////////////////////////// SceneGraph

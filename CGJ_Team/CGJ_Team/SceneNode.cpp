@@ -5,11 +5,13 @@ SceneNode::SceneNode()
 	modelMatrix = identity();
 	scaleMatrix = modelMatrix;
 	visible = true;
+
+	silhouetteShader = ShaderProgramManager::instance()->get("silhouette");
 }
 
 SceneNode::~SceneNode()
 {
-	
+
 }
 
 void SceneNode::setParent(SceneNode * parent)
@@ -96,10 +98,18 @@ void SceneNode::applyRTransform(Matrix4D transform)
 
 void SceneNode::draw(Matrix4D parentTransform)
 {
-	shaderProgram->BeginShader();
-
 	Matrix4D finalMatrix = parentTransform * modelMatrix;
 	if (visible && meshObj) {
+
+		// Draw Silhouette
+		// Falta meter aqui o CULLING
+		glCullFace(GL_FRONT);
+		silhouetteShader->BeginShader();
+		meshObj->draw(silhouetteShader, finalMatrix * scaleMatrix); // Draw Mesh
+
+																	// Draw Object
+		glCullFace(GL_BACK);
+		shaderProgram->BeginShader();
 
 		if (material) {
 			material->loadToShader(shaderProgram); // Load Material
@@ -116,14 +126,14 @@ void SceneNode::draw(Matrix4D parentTransform)
 		else {
 			meshObj->draw(shaderProgram, finalMatrix * scaleMatrix); // Draw Mesh
 		}
+
+		shaderProgram->EndShader();
 	}
 
 	for (auto it = childrenNodes.begin(); it != childrenNodes.end(); ++it)
 	{
 		(*it)->draw(finalMatrix);
 	}
-
-	shaderProgram->EndShader();
 }
 
 void SceneNode::destroy()
@@ -140,8 +150,8 @@ void SceneNode::destroy()
 
 /*Matrix4D SceneNode::getFinalTransform()
 {
-	if (parentNode != nullptr) {
-		return parentNode->getFinalTransform() * modelMatrix;
-	}
-	return modelMatrix;
+if (parentNode != nullptr) {
+return parentNode->getFinalTransform() * modelMatrix;
+}
+return modelMatrix;
 }*/

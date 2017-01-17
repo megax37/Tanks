@@ -2,6 +2,7 @@
 #define _SCENE_NODE_
 
 #include "engine.h"
+#include "ShaderProgramManager.h"
 
 class SceneNode
 {
@@ -44,6 +45,7 @@ protected:
 	Matrix4D scaleMatrix;
 
 	ShaderProgram* shaderProgram;
+	ShaderProgram* silhouetteShader;
 
 	bool visible;
 
