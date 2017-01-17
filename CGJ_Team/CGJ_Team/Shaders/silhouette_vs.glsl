@@ -13,13 +13,8 @@ uniform Camera {
 
 void main(void)
 {
-	mat4 scale = mat4(1.02, 0.0, 0.0, 0.0,
-					  0.0, 1.02, 0.0, 0.0,
-					  0.0, 0.0, 1.02, 0.0,
-					  0.0, 0.0, 0.0, 1.0);
-					  
-	mat4 model = ModelMatrix * scale;
-	vec4 vmPosition = ViewMatrix * model * vec4(inPosition, 1.0);
+	vec3 pos = inPosition + inNormal * 0.015;
+	vec4 vmPosition = ViewMatrix * ModelMatrix * vec4(pos, 1.0);
 
 	gl_Position = ProjectionMatrix * vmPosition;
 }

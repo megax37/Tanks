@@ -1027,6 +1027,7 @@ void setupOpenGL() {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+	//glEnable(GL_MULTISAMPLE);
 }
 
 void setupGLEW() {
