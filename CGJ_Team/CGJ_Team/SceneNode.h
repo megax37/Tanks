@@ -22,6 +22,7 @@ public:
 
 	void setVisible(bool flag);
 	bool isVisible();
+	void setUI();
 
 	SceneNode* createNode();
 	SceneNode* copyNode();
@@ -47,6 +48,7 @@ protected:
 	ShaderProgram* shaderProgram;
 	ShaderProgram* silhouetteShader;
 
+	bool isUI;
 	bool visible;
 
 	//Matrix4D getFinalTransform();

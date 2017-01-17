@@ -226,5 +226,11 @@
     <None Include="Shaders\sandtrail_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Shaders\silhouette_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\silhouette_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

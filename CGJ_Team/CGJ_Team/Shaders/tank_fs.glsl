@@ -41,6 +41,19 @@ void main(void)
 	float intensity = max(dot(L, N), 0.05);
 	color = mix(DiffuseReflectivity * intensity, LightColor, 0.1);
 
+	vec3 hotColor = DiffuseReflectivity;
+	vec3 coldColor = DiffuseReflectivity * 0.2;
+
+	float theta = acos(dot(L, N));
+	float factor;
+
+	if(theta < PI / 2.0) {
+		factor = 1.0 - 0.5 * sin(theta);
+	} else {
+		factor = 0.5 * sin(theta);
+	}
+	color = mix(mix(coldColor, hotColor, factor) * intensity, LightColor, 0.1);
+
 	if(intensity > 0.0) {
 		vec3 H = normalize(L + E);
 
@@ -54,14 +67,14 @@ void main(void)
 	}
 
 	/* HEMISPHERE AMBIENT LIGHTING */
-	float theta = acos(dot(topHemisphere, normalize(exNormalWorld)));
-	float factor;
+	theta = acos(dot(topHemisphere, normalize(exNormalWorld)));
+	
 	if(theta < PI / 2.0) {
 		factor = 1.0 - 0.5 * sin(theta);
 	} else {
 		factor = 0.5 * sin(theta);
 	}
-	color = mix(color, mix(groundColor, skyColor, factor), 0.3);
+	color = mix(color, mix(groundColor, skyColor, factor), 0.2);
 
 	FragmentColor = vec4(color,1.0);
 }

@@ -5,6 +5,7 @@ SceneNode::SceneNode()
 	modelMatrix = identity();
 	scaleMatrix = modelMatrix;
 	visible = true;
+	isUI = false;
 
 	silhouetteShader = ShaderProgramManager::instance()->get("silhouette");
 }
@@ -59,6 +60,11 @@ bool SceneNode::isVisible()
 	return visible;
 }
 
+void SceneNode::setUI()
+{
+	isUI = true;
+}
+
 SceneNode * SceneNode::createNode()
 {
 	SceneNode* child = new SceneNode();
@@ -101,14 +107,15 @@ void SceneNode::draw(Matrix4D parentTransform)
 	Matrix4D finalMatrix = parentTransform * modelMatrix;
 	if (visible && meshObj) {
 
-		// Draw Silhouette
-		// Falta meter aqui o CULLING
-		glCullFace(GL_FRONT);
-		silhouetteShader->BeginShader();
-		meshObj->draw(silhouetteShader, finalMatrix * scaleMatrix); // Draw Mesh
+		if (!isUI) {
+			// Draw Silhouette
+			glCullFace(GL_FRONT);
+			silhouetteShader->BeginShader();
+			meshObj->draw(silhouetteShader, finalMatrix * scaleMatrix); // Draw Mesh
+			glCullFace(GL_BACK);
+		}
 
-																	// Draw Object
-		glCullFace(GL_BACK);
+		// Draw Object
 		shaderProgram->BeginShader();
 
 		if (material) {

@@ -304,14 +304,7 @@ void createShaderPrograms()
 	program->addAttribute("inNormal", NORMALS);
 	program->create();
 	program->addUniform("ModelMatrix");
-	program->addUniform("NormalMatrix");
-	program->addUniform("DiffuseReflectivity");
-	program->addUniform("SpecularReflectivity");
-	program->addUniform("SpecularExponent");
-	program->addUniform("Texmap");
-	program->addUniform("TexMode");
 	program->addUniformBlock("Camera", UBO_BP);
-	program->addUniformBlock("DirectionalLight", UBO_BP1);
 	ShaderProgramManager::instance()->add("silhouette", program);
 }
 
@@ -546,42 +539,42 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	p->setMesh(MeshManager::instance()->get("rocks1"));
 	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -2.6f, 2.6, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
+	props.push_back(new StaticObject(position, -2.6f, 2.6f, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
 
 	position = Vector3D(6.0f, 0.0f, -16.0f);
 	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("rocks1"));
 	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -2.6f, 2.6, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
+	props.push_back(new StaticObject(position, -2.6f, 2.6f, 0.0f, 6.0f, -3.0f, 3.0f)); //Rocks 01
 
 	position = Vector3D(-19.0f, 0.0f, 14.0f);
 	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("rocks2"));
 	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -2.5f, 1.5, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
+	props.push_back(new StaticObject(position, -2.5f, 1.5f, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
 
 	position = Vector3D(-10.0f, 0.0f, 21.0f);
 	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("rocks2"));
 	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -2.5f, 1.5, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
+	props.push_back(new StaticObject(position, -2.5f, 1.5f, 0.0f, 6.0f, -1.7f, 1.7f)); //Rocks 02
 
 	position = Vector3D(5.0f, 0.0f, 12.0f);
 	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("rocks3"));
 	p->setMaterial(MaterialManager::instance()->get("YellowDark"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -2.2f, 2.1, 0.0f, 1.0f, -3.5f, 2.3f)); //Rocks 03
+	props.push_back(new StaticObject(position, -2.2f, 2.1f, 0.0f, 1.0f, -3.5f, 2.3f)); //Rocks 03
 
 	position = Vector3D(19.0f, 0.0f, 6.0f);
 	p = scenegraph->createNode();
 	p->setMesh(MeshManager::instance()->get("busted_tank"));
 	p->setMaterial(MaterialManager::instance()->get("TankGrey"));
 	p->setMatrix(translation(position));
-	props.push_back(new StaticObject(position, -1.2f, 2.5, 0.0f, 3.0f, -1.0f, 1.0f)); //BustedTank
+	props.push_back(new StaticObject(position, -1.2f, 2.5f, 0.0f, 3.0f, -1.0f, 1.0f)); //BustedTank
 }
 
 SceneNode *p1_HUDBar_1, *p1_HUDBar_2, *p1_HUDBar_3, *p2_HUDBar_1, *p2_HUDBar_2, *p2_HUDBar_3;
@@ -600,18 +593,21 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p1_HUDBar_1->setTexture(tex);
 	p1_HUDBar_1->setMatrix(translation(30.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
+	p1_HUDBar_1->setUI();
 
 	p1_HUDBar_2 = scenegraph->createNode();
 	p1_HUDBar_2->setMesh(mesh);
 	p1_HUDBar_2->setTexture(tex);
 	p1_HUDBar_2->setMatrix(translation(90.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
+	p1_HUDBar_2->setUI();
 
 	p1_HUDBar_3 = scenegraph->createNode();
 	p1_HUDBar_3->setMesh(mesh);
 	p1_HUDBar_3->setTexture(tex);
 	p1_HUDBar_3->setMatrix(translation(150.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
+	p1_HUDBar_3->setUI();
 
 	tex = TextureManager::instance()->get("redMetal");
 
@@ -620,18 +616,21 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p2_HUDBar_1->setTexture(tex);
 	p2_HUDBar_1->setMatrix(translation(610.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_1->setScale(scale(25.0f, 0.1f, 10.0f));
+	p2_HUDBar_1->setUI();
 
 	p2_HUDBar_2 = scenegraph->createNode();
 	p2_HUDBar_2->setMesh(mesh);
 	p2_HUDBar_2->setTexture(tex);
 	p2_HUDBar_2->setMatrix(translation(550.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_2->setScale(scale(25.0f, 0.1f, 10.0f));
+	p2_HUDBar_2->setUI();
 
 	p2_HUDBar_3 = scenegraph->createNode();
 	p2_HUDBar_3->setMesh(mesh);
 	p2_HUDBar_3->setTexture(tex);
 	p2_HUDBar_3->setMatrix(translation(490.0f, 15.0f, -1.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_HUDBar_3->setScale(scale(25.0f, 0.1f, 10.0f));
+	p2_HUDBar_3->setUI();
 
 	p1HUD = new HUD(p1_HUDBar_1, p1_HUDBar_2, p1_HUDBar_3, tankObject);
 	p2HUD = new HUD(p2_HUDBar_1, p2_HUDBar_2, p2_HUDBar_3, tankObject2);
@@ -645,6 +644,7 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p1_Win->setMatrix(translation(320.0f, 240.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p1_Win->setScale(scale(320.0f, 0.1f, 240.0f));
 	p1_Win->setVisible(false);
+	p1_Win->setUI();
 
 	tex = TextureManager::instance()->get("winScreen_2");
 
@@ -654,6 +654,7 @@ void createHUDSceneGraph(SceneGraph* scenegraph)
 	p2_Win->setMatrix(translation(320.0f, 240.0f, 0.0f) * rotation(90.0f, 1.0f, 0.0f, 0.0f));
 	p2_Win->setScale(scale(320.0f, 0.1f, 240.0f));
 	p2_Win->setVisible(false);
+	p2_Win->setUI();
 }
 
 void createParticlesEffectsSceneGraph(SceneGraph* scenegraph)
