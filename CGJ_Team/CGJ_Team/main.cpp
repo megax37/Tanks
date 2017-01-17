@@ -442,7 +442,7 @@ void createEnvironmentSceneGraph(SceneGraph* scenegraph)
 	// Ground
 	mesh = MeshManager::instance()->get("terrain");
 	tex = TextureManager::instance()->get("desert");
-	mat = MaterialManager::instance()->get("YellowLight");
+	mat = MaterialManager::instance()->get("Ground");
 
 	SceneNode *ground = scenegraph->createNode();
 	ground->setMesh(mesh);
@@ -729,12 +729,16 @@ void update() {
 	RotationAngleX = RotationAngleY = 0.0f;
 
 	tankObject->update(elapsedTime);
-	if (tankObject->collides(tankObject2))
+	if (tankObject->collides(tankObject2) ||
+		tankObject->getPosition().getX() > 26.0f || tankObject->getPosition().getX() < -26.0f ||
+		tankObject->getPosition().getZ() > 26.0f || tankObject->getPosition().getZ() < -26.0f)
 	{
 		tankObject->hitTank();
 	}
 	tankObject2->update(elapsedTime);
-	if (tankObject2->collides(tankObject))
+	if (tankObject2->collides(tankObject) ||
+		tankObject2->getPosition().getX() > 26.0f || tankObject2->getPosition().getX() < -26.0f ||
+		tankObject2->getPosition().getZ() > 26.0f || tankObject2->getPosition().getZ() < -26.0f)
 	{
 		tankObject2->hitTank();
 	}
