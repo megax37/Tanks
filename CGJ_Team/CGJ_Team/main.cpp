@@ -173,6 +173,10 @@ void createMeshes()
 	mesh->create();
 	MeshManager::instance()->add("TankProps", mesh);
 
+	mesh = new Mesh("Models/Tank/TankAntenna.obj");
+	mesh->create();
+	MeshManager::instance()->add("TankAntenna", mesh);
+
 	mesh = new Mesh("Models/Tank/TankTurret.obj");
 	mesh->create();
 	MeshManager::instance()->add("TankTurret", mesh);
@@ -310,8 +314,8 @@ void createShaderPrograms()
 
 /////////////////////////////////////////////////////////////////////// SceneGraph
 
-SceneNode *tankBase, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
-SceneNode *tankBase2, *frontLeftWheel2, *frontRightWheel2, *backLeftWheel2, *backRightWheel2, *tankTurret2;
+SceneNode *tankBase, *tankAntenna, *frontLeftWheel, *frontRightWheel, *backLeftWheel, *backRightWheel, *tankTurret;
+SceneNode *tankBase2, *tankAntenna2, *frontLeftWheel2, *frontRightWheel2, *backLeftWheel2, *backRightWheel2, *tankTurret2;
 
 void createTankSceneGraph(SceneGraph* scenegraph)
 {
@@ -370,6 +374,11 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	othersTank = tankBase->createNode();
 	othersTank->setMesh(mesh);
 	othersTank->setMaterial(mat);
+
+	mesh = MeshManager::instance()->get("TankAntenna");
+	tankAntenna = tankBase->createNode();
+	tankAntenna->setMesh(mesh);
+	tankAntenna->setMaterial(mat);
 	
 	// Lights material
 	mat = MaterialManager::instance()->get("TankLights");
@@ -429,6 +438,11 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	othersTank2->setMesh(mesh);
 	othersTank2->setMaterial(mat);
 
+	mesh = MeshManager::instance()->get("TankAntenna");
+	tankAntenna2 = tankBase2->createNode();
+	tankAntenna2->setMesh(mesh);
+	tankAntenna2->setMaterial(mat);
+
 	// Lights material
 	mat = MaterialManager::instance()->get("TankLights");
 	mesh = MeshManager::instance()->get("TankLights");
@@ -440,8 +454,8 @@ void createTankSceneGraph(SceneGraph* scenegraph)
 	bulletManager = new BulletManager(scenegraph->getRoot(), 5);
 	bulletManager2 = new BulletManager(scenegraph->getRoot(), 5);
 
-	tankObject = new Tank(tankBase, tankTurret, bulletManager, 1);
-	tankObject2 = new Tank(tankBase2, tankTurret2, bulletManager2, 2);
+	tankObject = new Tank(tankBase, tankTurret, tankAntenna, bulletManager, 1);
+	tankObject2 = new Tank(tankBase2, tankTurret2, tankAntenna2, bulletManager2, 2);
 }
 
 void createEnvironmentSceneGraph(SceneGraph* scenegraph)

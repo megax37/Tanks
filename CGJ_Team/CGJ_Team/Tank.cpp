@@ -1,10 +1,11 @@
 #include "Tank.h"
 
-Tank::Tank(SceneNode * base, SceneNode * turret, BulletManager* ammo, int player) :
+Tank::Tank(SceneNode * base, SceneNode * turret, SceneNode * antenna, BulletManager* ammo, int player) :
 	Collider(-0.9f, 0.9f, 0.0f, 1.9f, -1.1f, 1.1f)
 {
 	tankBase = base;
 	tankTurret = turret;
+	tankAntenna = antenna;
 	ammoManager = ammo;
 
 	playerNumber = player;
@@ -91,6 +92,7 @@ void Tank::move()
 {
 	tankBase->setMatrix(translation(_position) * rotation(tankAngle, AXIS3D_Y));
 	tankTurret->setMatrix(rotation(turretAngle, AXIS3D_Y));
+	tankAntenna->setMatrix(rotation(turretAngle, AXIS3D_Y));
 
 	if ((_position - _lastposition).magnitude() > 0.1f && timeBuffer2 > 200) {
 		Vector4D lpos = leftTrailRelativePos.toVec4() * (translation(_lastposition) * rotation(tankAngle, AXIS3D_Y));

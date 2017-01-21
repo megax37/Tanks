@@ -11,7 +11,7 @@ class BulletManager;
 class Tank : public Collider
 {
 public:
-	Tank(SceneNode* tankBase, SceneNode* tankTurret, BulletManager* ammo, int player);
+	Tank(SceneNode* tankBase, SceneNode* tankTurret, SceneNode* tankAntenna, BulletManager* ammo, int player);
 	~Tank();
 
 	void update(int elapsedTime);
@@ -33,7 +33,7 @@ public:
 	
 private:
 
-	SceneNode* tankBase, *tankTurret;
+	SceneNode* tankBase, *tankTurret, *tankAntenna;
 
 	int playerNumber = 1;
 	int life = 3;
